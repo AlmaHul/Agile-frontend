@@ -1,17 +1,15 @@
+// LandingPage.jsx
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/images/JöraLogo.png";
+import "../css/Forms.css"; // återanvänd samma CSS
 
+// LandingPage.jsx
 export default function LandingPage() {
-  const navigate = useNavigate();
-
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Välkommen!</h1>
-      <button onClick={() => navigate("/login")} style={{ margin: "10px" }}>
-        Logga in
-      </button>
-      <button onClick={() => navigate("/register")} style={{ margin: "10px" }}>
-        Registrera
-      </button>
-    </div>
+    <main className="hero">
+      <h1>Välkommen till Jöra!</h1>
+      <p>Beskrivning eller slogan här.</p>
+    </main>
   );
 }
+
