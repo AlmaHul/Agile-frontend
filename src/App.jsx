@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import LandingPage from "./LandingPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -7,7 +8,8 @@ import RegisterPage from "./pages/RegisterPage";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route
         path="/home"
@@ -17,7 +19,7 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<h1>404 Not Found test</h1>} />
+      <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );
 }
