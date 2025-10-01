@@ -1,3 +1,31 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 70px; /* tjocklek på header */
+  background-color: #fff; /* valfri bakgrund */
+}
+
+.logo-small {
+  height: 50px;
+  width: auto;
+}
+
+.header-buttons button {
+  background-color: blue;
+  color: orange;
+  border: none;
+  padding: 8px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.header-buttons button:hover {
+  opacity: 0.8;
+}
 /* LoginPage och RegisterPage */
 body, html {
   margin: 0;
