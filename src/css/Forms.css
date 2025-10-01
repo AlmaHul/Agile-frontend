@@ -2,30 +2,46 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  height: 70px; /* tjocklek på header */
-  background-color: #FFB347; /* valfri bakgrund */
+  padding: 1px 30px;
+  height: 70px;
+  background: linear-gradient(135deg, #FFB347, #FFCC70); /* ljus orange gradient */
+  border-radius: 20px; /* rundar alla hörn */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* mjuk skugga */
 }
 
-.logo-small {
-  height: 50px;
-  width: auto;
+/* Knapparna till vänster */
+.header-buttons {
+  display: flex;
+  gap: 15px;
 }
 
 .header-buttons button {
-  background-color: blue;
-  color: orange;
+  background-color: #ffffff; /* vit bakgrund */
+  color: #0c03f7; /* blå text */
   border: none;
   padding: 8px 16px;
-  margin-left: 10px;
-  cursor: pointer;
-  border-radius: 5px;
+  border-radius: 25px;
   font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .header-buttons button:hover {
-  opacity: 0.8;
+  background-color: #e6e6ff; /* ljus blå vid hover */
+  transform: translateY(-2px);
 }
+
+
+/* Loggan till höger */
+.logo-small {
+  height: 70px; /* lite större logga */
+  width: auto;
+  border-radius: 15px; /* rundade hörn */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+
 /* LoginPage och RegisterPage */
 body, html {
   margin: 0;
