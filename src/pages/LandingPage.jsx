@@ -44,22 +44,16 @@ const LandingPage = () => {
                   Starta gratis <FaArrowRight className="btn-icon" />
                 </a>
                 <a href="#features" className="btn secondary">
-                  Se demo
+                
                 </a>
               </div>
               
               <div className="trust-indicators">
                 <div className="trust-item">
-                  <div className="trust-number">10k+</div>
-                  <div className="trust-label">Aktiva användare</div>
-                </div>
-                <div className="trust-item">
-                  <div className="trust-number">98%</div>
-                  <div className="trust-label">Uppnår sina mål</div>
-                </div>
-                <div className="trust-item">
-                  <div className="trust-number">4.9/5</div>
-                  <div className="trust-label">Betyg</div>
+                 
+               
+            
+                
                 </div>
               </div>
             </div>
@@ -119,13 +113,10 @@ const LandingPage = () => {
               </div>
 
               <div className="card-actions">
-                <button className="action-btn primary">
-                  <FaShareAlt />
-                  Bjud in fler
-                </button>
+            
                 <button className="action-btn secondary">
-                  <FaPlus />
-                  Lägg till uppgift
+                  
+                
                 </button>
               </div>
             </div>
