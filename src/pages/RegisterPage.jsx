@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Forms.css";
 import logo from "../assets/images/JöraLogo.png";
+import { API_URL } from "../utils/api"; //
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -25,7 +26,7 @@ const RegisterPage = () => {
     setFieldErrors({});
 
     try {
-      const response = await fetch("https://agile-project-4.onrender.com/api/auth/register", {
+      const response = await fetch(`${API_URL}auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),

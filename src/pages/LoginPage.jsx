@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import "../css/Forms.css";
 import logo from "../assets/images/JöraLogo.png";
+import { API_URL } from "../utils/api"; //
 
 
 const LoginPage = () => {
@@ -12,12 +13,14 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const location = useLocation();
-const message = location.state?.message;
+  const message = location.state?.message;
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://agile-project-4.onrender.com/api/auth/login", {
+      const response = await fetch(`${API_URL}auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: identifier, password }),
