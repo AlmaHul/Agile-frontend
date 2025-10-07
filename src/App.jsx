@@ -1,10 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";  // Denna importeras
+import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import RegisterPage from "./pages/RegisterPage";  // Denna importeras
+import RegisterPage from "./pages/RegisterPage";
+import CreateChallengePage from "./pages/CreateChallengePage"; 
 
 function App() {
   return (
@@ -12,13 +13,22 @@ function App() {
       <Header /> {/* Header syns på alla sidor */}
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />  {/* Ändra till LoginPage */}
-        <Route path="/register" element={<RegisterPage />} />  {/* Ändra till RegisterPage */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/home"
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        {/* ✅ Ny route för att skapa challenge */}
+        <Route
+          path="/challenges/create"
+          element={
+            <ProtectedRoute>
+              <CreateChallengePage />
             </ProtectedRoute>
           }
         />
