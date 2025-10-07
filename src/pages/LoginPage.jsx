@@ -22,6 +22,7 @@ const LoginPage = () => {
     try {
       const response = await fetch(`${API_URL}auth/login`, {
         method: "POST",
+        credentials: "include", // <— VIKTIGT: tillåt cookie att sättas över CORS
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: identifier, password }),
       });
@@ -47,7 +48,7 @@ return (
 
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleLogin}>
-         <label htmlFor="identifier">Användarnamn eller e-post</label>
+        <label htmlFor="identifier">Användarnamn eller e-post</label>
           <input
             id="identifier"
             type="text"
