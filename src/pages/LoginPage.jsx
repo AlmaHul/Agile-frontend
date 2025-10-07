@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import "../css/Forms.css";
 import logo from "../assets/images/JöraLogo.png";
-import { API_URL } from "../utils/api"; //
-
+import { API_URL } from "../utils/api";
 
 const LoginPage = () => {
   const [identifier, setIdentifier] = useState("");
@@ -14,8 +13,6 @@ const LoginPage = () => {
   const { login } = useAuth();
   const location = useLocation();
   const message = location.state?.message;
-
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -29,7 +26,7 @@ const LoginPage = () => {
       if (response.ok) {
         const data = await response.json();
         login(data.access_token, data.refresh_token);
-        navigate("/home", { replace: true }); // navigera direkt efter login
+        navigate("/home", { replace: true });
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Inloggning misslyckades");
@@ -39,15 +36,16 @@ const LoginPage = () => {
     }
   };
 
-return (
+  return (
     <div className="form-page">
       <div className="form-container">
-          {message && <p className="success">{message}</p>}
+        {message && <p className="success">{message}</p>}
         <img src={logo} alt="Jöra logo" className="logo" />
 
         {error && <p className="error">{error}</p>}
+
         <form onSubmit={handleLogin}>
-         <label htmlFor="identifier">Användarnamn eller e-post</label>
+          <label htmlFor="identifier">Användarnamn eller e-post</label>
           <input
             id="identifier"
             type="text"
@@ -56,6 +54,7 @@ return (
             onChange={(e) => setIdentifier(e.target.value)}
             required
           />
+
           <label htmlFor="password">Lösenord</label>
           <input
             id="password"
@@ -65,6 +64,12 @@ return (
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
+          {/* Glömt lösenord-länk */}
+          <p style={{ marginTop: "10px", textAlign: "right" }}>
+            <Link to="/forgot-password">Glömt lösenord?</Link>
+          </p>
+
           <button type="submit">Logga in</button>
         </form>
       </div>
@@ -72,5 +77,8 @@ return (
   );
 };
 
-
 export default LoginPage;
+
+
+
+

@@ -5,6 +5,9 @@ import LoginPage from "./pages/LoginPage";  // Denna importeras
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";  // Denna importeras
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
 
 function App() {
   return (
@@ -14,6 +17,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />  {/* Ändra till LoginPage */}
         <Route path="/register" element={<RegisterPage />} />  {/* Ändra till RegisterPage */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route
           path="/home"
           element={
