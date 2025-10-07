@@ -9,6 +9,14 @@
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
+.logo {
+  border-radius: 20px; /* mjuka kurvor */
+  box-shadow: 5px 5px 20px rgba(0,0,0,0.3); /* ger djup */
+  transform: perspective(500px) rotateX(5deg) rotateY(5deg); /* lätt 3D-lutning */
+}
+
+
+
 /* Knapparna till höger */
 .header-buttons {
   display: flex;
