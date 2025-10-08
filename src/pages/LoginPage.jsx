@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import "../css/Forms.css";
 import logo from "../assets/images/JöraLogo.png";
-import { API_URL } from "../utils/api"; //
+import { API_URL } from "../utils/api";
 
 
 const LoginPage = () => {

@@ -1,0 +1,145 @@
+.home-page {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7f9fc 0%, #e8ecf5 100%);
+  font-family: "Inter", sans-serif;
+}
+
+/* --- WELCOME SECTION --- */
+.welcome {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.welcome h1 {
+  font-size: 2.8rem;
+  color: #222;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* --- AVATAR SECTION --- */
+.avatar {
+  text-align: center;
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-image {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 4px solid #4a90e2;
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.avatar-image:hover {
+  transform: scale(1.05);
+}
+
+/* --- BUTTON STYLE --- */
+.avatar-btn {
+  margin-top: 1.2rem;
+  background-color: #e66b00;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.avatar-btn:hover {
+  background-color: #357ab8;
+  transform: translateY(-2px);
+}
+
+
+section {
+  margin-bottom: 50px;
+  padding: 0 60px;
+}
+
+.cards, .invite-card {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.card, .invite-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 200px;
+}
+
+.card.active {
+  border-color: #4caf50;
+}
+
+.card.done {
+  border-color: #2196f3;
+}
+
+button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: #e66b00;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+
+
+.challenges-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.challenges-table th,
+.challenges-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.challenges-table th {
+  background-color: #f4f4f4;
+}
+
+.challenges-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.challenges-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.challenges-table button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: #e66b00;
+  color: white;
+}
+
+.challenges-table button:hover {
+  opacity: 0.9;
+}

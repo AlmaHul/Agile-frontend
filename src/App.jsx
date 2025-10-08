@@ -5,6 +5,8 @@ import LoginPage from "./pages/LoginPage";  // Denna importeras
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";  // Denna importeras
+import CreateAvatarPage from "./pages/CreateAvatarPage";
+import UpdateAvatarPage from "./pages/UpdateAvatarPage";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />  {/* Ändra till LoginPage */}
         <Route path="/register" element={<RegisterPage />} />  {/* Ändra till RegisterPage */}
+        <Route path="/create-avatar" element={<CreateAvatarPage />} />
+        <Route path="/update-avatar" element={<UpdateAvatarPage />} />
         <Route
           path="/home"
           element={
