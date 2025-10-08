@@ -5,7 +5,8 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";
-import CreateChallengePage from "./pages/CreateChallengePage"; 
+import CreateChallengePage from "./pages/CreateChallengePage";
+import ListChallengesPage from "./pages/ListChallengesPage"; // 👈 redan importerat
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+
         <Route
           path="/home"
           element={
@@ -23,6 +25,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         {/* ✅ Ny route för att skapa challenge */}
         <Route
           path="/challenges/create"
@@ -32,6 +35,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* ✅ Ny route för att visa mina challenges */}
+        <Route
+          path="/challenges"
+          element={
+            <ProtectedRoute>
+              <ListChallengesPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </>
