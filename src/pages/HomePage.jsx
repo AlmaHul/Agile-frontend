@@ -7,26 +7,28 @@ import { fetchWithAuth } from "../auth/authService";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { user, isLoggedIn } = useAuth(); // user = { id: '5' }
+  const { user, isLoggedIn } = useAuth();
 
   const [userData, setUserData] = useState(null);
+
+  // Avatar
   const [avatar, setAvatar] = useState(null);
   const [loadingAvatar, setLoadingAvatar] = useState(true);
 
+  // Challenges
+  const [activeChallenges, setActiveChallenges] = useState([]);
+  const [loadingChallenges, setLoadingChallenges] = useState(true);
 
+  // Invitations
+  const [invitations, setInvitations] = useState([]);
+  const [loadingInvites, setLoadingInvites] = useState(true);
 
-  const [activeChallenges, setActiveChallenges] = useState([
-    { id: 1, title: "Gå 10 000 steg", status: "active", start: "2025-10-07", end: "2025-10-10" },
-    { id: 2, title: "Drick 2L vatten", status: "done", start: "2025-10-06", end: "2025-10-09" },
-  ]);
-
-  const [invitations, setInvitations] = useState([
-    { id: 1, from: "Jane Doe", title: "Gå 10 000 steg" },
-  ]);
-
+  // Stats (dummy)
   const [stats, setStats] = useState({ completed: 7, active: 3 });
 
-  // ✅ Hämta info om inloggad användare
+  // ---------------------------
+  // Hämta inloggad användare
+  // ---------------------------
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -41,27 +43,24 @@ const HomePage = () => {
         console.error("Fel vid hämtning av användardata:", err);
       }
     };
-
     fetchUserData();
   }, []);
 
-  // Fetch avatar när komponenten mountas
+  // ---------------------------
+  // Hämta avatar
+  // ---------------------------
   useEffect(() => {
     const fetchAvatar = async () => {
       if (!user?.id) return;
-
       try {
         const res = await fetchWithAuth(`${API_URL}avatar/${user.id}`);
-
         if (res.ok) {
           const data = await res.json();
           setAvatar(data);
         } else if (res.status === 404) {
-          setAvatar(null); // ingen avatar skapad
-        } else if (res.status === 401) {
-          console.error("Unauthorized: token saknas eller ogiltig");
+          setAvatar(null);
         } else {
-          console.error("Fel vid hämtning av avatar:", res.status, res.statusText);
+          console.error("Fel vid hämtning av avatar:", res.status);
         }
       } catch (err) {
         console.error("Fel vid hämtning av avatar:", err);
@@ -69,18 +68,79 @@ const HomePage = () => {
         setLoadingAvatar(false);
       }
     };
-
     fetchAvatar();
   }, [user]);
 
+  // ---------------------------
+  // Hämta aktiva utmaningar
+  // ---------------------------
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      if (!user?.id) return;
+
+      setLoadingChallenges(true);
+      try {
+        const res = await fetchWithAuth(`${API_URL}challenge/challenges`);
+        if (res.ok) {
+          const data = await res.json();
+          const mapped = data.map((c) => ({
+            id: c.id,
+            title: c.title,
+            status: c.score === null ? "active" : "done",
+            start: c.start_at ? c.start_at.split("T")[0] : "",
+            end: c.deadline_at ? c.deadline_at.split("T")[0] : "",
+          }));
+          setActiveChallenges(mapped);
+        } else {
+          console.error("Kunde inte hämta challenges:", res.status);
+        }
+      } catch (err) {
+        console.error("Fel vid hämtning av challenges:", err);
+      } finally {
+        setLoadingChallenges(false);
+      }
+    };
+    fetchChallenges();
+  }, [user]);
+
+  // ---------------------------
+  // Hämta inbjudningar
+  // ---------------------------
+  useEffect(() => {
+    const fetchInvites = async () => {
+      if (!user?.id) return;
+
+      setLoadingInvites(true);
+      try {
+        const res = await fetchWithAuth(`${API_URL}challenge/challenges/invites/me`);
+        if (res.ok) {
+          const data = await res.json();
+          setInvitations(data);
+        } else {
+          console.error("Kunde inte hämta inbjudningar:", res.status);
+        }
+      } catch (err) {
+        console.error("Fel vid hämtning av inbjudningar:", err);
+      } finally {
+        setLoadingInvites(false);
+      }
+    };
+    fetchInvites();
+  }, [user]);
+
+  // ---------------------------
+  // Navigering
+  // ---------------------------
   const handleCreateChallenge = () => navigate("/create-challenge");
   const handleCreateAvatar = () => navigate("/create-avatar");
   const handleUpdateAvatar = () => navigate("/update-avatar");
 
-  const handleAcceptInvite = (id) => alert(`Accepted invite ${id}`);
-  const handleDeclineInvite = (id) => alert(`Declined invite ${id}`);
+  const handleAcceptInvite = (id) => alert(`Accepterade inbjudan ${id}`);
+  const handleDeclineInvite = (id) => alert(`Nekade inbjudan ${id}`);
 
-  // Generera avataaars URL
+  // ---------------------------
+  // Avatar URL
+  // ---------------------------
   const getAvatarUrl = (avatar) => {
     if (!avatar) return null;
     const params = new URLSearchParams({
@@ -128,7 +188,9 @@ const HomePage = () => {
       {/* Aktiva utmaningar */}
       <section className="active-challenges">
         <h2>Aktiva utmaningar 🔥</h2>
-        {activeChallenges.length === 0 ? (
+        {loadingChallenges ? (
+          <p>Laddar utmaningar...</p>
+        ) : activeChallenges.length === 0 ? (
           <p>Inga aktiva utmaningar just nu</p>
         ) : (
           <table className="challenges-table">
@@ -147,9 +209,7 @@ const HomePage = () => {
                   <td>{c.title}</td>
                   <td>
                     {c.status === "active" && "🔥 Aktiv"}
-                    {c.status === "pending" && "⏳ Pågår"}
                     {c.status === "done" && "✅ Klar"}
-                    {c.status === "declined" && "❌ Nekad"}
                   </td>
                   <td>{c.start}</td>
                   <td>{c.end}</td>
@@ -166,16 +226,21 @@ const HomePage = () => {
       {/* Inbjudningar */}
       <section className="invitations">
         <h2>Inbjudningar 📩</h2>
-        {invitations.length === 0 && <p>Inga nya inbjudningar</p>}
-        {invitations.map((invite) => (
-          <div key={invite.id} className="invite-card">
-            <p>
-              {invite.from} har utmanat dig: <strong>{invite.title}</strong>
-            </p>
-            <button className="avatar-btn" onClick={() => handleAcceptInvite(invite.id)}>Acceptera</button>
-            <button className="avatar-btn" onClick={() => handleDeclineInvite(invite.id)}>Neka</button>
-          </div>
-        ))}
+        {loadingInvites ? (
+          <p>Laddar inbjudningar...</p>
+        ) : invitations.length === 0 ? (
+          <p>Inga nya inbjudningar</p>
+        ) : (
+          invitations.map((invite) => (
+            <div key={invite.id} className="invite-card">
+              <p>
+                {invite.inviter_email} har utmanat dig: <strong>{invite.challenge_title}</strong>
+              </p>
+              <button className="avatar-btn" onClick={() => handleAcceptInvite(invite.id)}>Acceptera</button>
+              <button className="avatar-btn" onClick={() => handleDeclineInvite(invite.id)}>Neka</button>
+            </div>
+          ))
+        )}
       </section>
 
       {/* Skapa ny utmaning */}
@@ -194,6 +259,8 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
 
 
 
