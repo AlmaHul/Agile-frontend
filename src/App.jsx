@@ -8,6 +8,8 @@ import RegisterPage from "./pages/RegisterPage";  // Denna importeras
 import CreateAvatarPage from "./pages/CreateAvatarPage";
 import UpdateAvatarPage from "./pages/UpdateAvatarPage";
 import CreateChallengePage from "./pages/CreateChallengePage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />  {/* Ändra till LoginPage */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/register" element={<RegisterPage />} />  {/* Ändra till RegisterPage */}
         <Route path="/create-avatar" element={<CreateAvatarPage />} />
         <Route path="/update-avatar" element={<UpdateAvatarPage />} />

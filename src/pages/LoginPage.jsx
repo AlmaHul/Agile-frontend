@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import "../css/Forms.css";
 import logo from "../assets/images/JöraLogo.png";
@@ -65,6 +65,12 @@ return (
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
+           {/* Glömt lösenord-länk */}
+          <p style={{ marginTop: "10px", textAlign: "right" }}>
+            <Link to="/forgot-password">Glömt lösenord?</Link>
+          </p>
+
           <button type="submit">Logga in</button>
         </form>
       </div>
