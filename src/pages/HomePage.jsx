@@ -248,12 +248,7 @@ const HomePage = () => {
         <button className="avatar-btn" onClick={handleCreateChallenge}>➕ Skapa ny utmaning</button>
       </section>
 
-      {/* Statistik */}
-      <section className="stats">
-        <h2>Din statistik 🏅</h2>
-        <p>Klara utmaningar: {stats.completed}</p>
-        <p>Aktiva utmaningar: {stats.active}</p>
-      </section>
+
     </div>
   );
 };
