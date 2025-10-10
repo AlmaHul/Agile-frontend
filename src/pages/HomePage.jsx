@@ -86,6 +86,7 @@ const HomePage = () => {
           const mapped = data.map((c) => ({
             id: c.id,
             title: c.title,
+            description: c.description,
             status: c.score === null ? "active" : "done",
             start: c.start_at ? c.start_at.split("T")[0] : "",
             end: c.deadline_at ? c.deadline_at.split("T")[0] : "",
@@ -214,7 +215,7 @@ const HomePage = () => {
                   <td>{c.start}</td>
                   <td>{c.end}</td>
                   <td>
-                    <button onClick={() => alert(`Visa challenge ${c.id}`)}>Visa</button>
+                    <td>{c.description || "Ingen beskrivning"}</td>
                   </td>
                 </tr>
               ))}
