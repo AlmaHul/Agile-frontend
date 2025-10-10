@@ -26,7 +26,7 @@ function App() {
         <Route path="/create-challenge" element={<CreateChallengePage />} />
 
         <Route
-          path="/home"
+          path="/profile"
           element={
             <ProtectedRoute>
               <HomePage />

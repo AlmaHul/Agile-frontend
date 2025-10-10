@@ -29,7 +29,7 @@ export default function Header() {
             {/* Profilknappen navigerar till /home */}
             <button
               className="profile-btn"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/profile")}
             ></button>
           </>
         )}
