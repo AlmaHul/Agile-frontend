@@ -94,7 +94,7 @@ const CreateChallengePage = () => {
 
       if (res.ok) {
         setSuccess("Utmaningen skapades!");
-        setTimeout(() => navigate("/home", { replace: true }), 1200);
+        setTimeout(() => navigate("/profile", { replace: true }), 1200);
       } else {
         const errData = await res.json();
         setError(errData.error || "Misslyckades att skapa utmaning.");

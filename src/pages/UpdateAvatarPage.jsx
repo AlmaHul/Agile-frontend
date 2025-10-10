@@ -79,7 +79,7 @@ const UpdateAvatarPage = () => {
 
       if (res.ok) {
         alert("Avatar uppdaterad!");
-        navigate("/home"); // tillbaka till startsidan
+        navigate("/profile"); // tillbaka till startsidan
       } else {
         alert("Fel vid uppdatering av avatar");
       }

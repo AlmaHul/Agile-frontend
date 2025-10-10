@@ -65,7 +65,7 @@ const CreateAvatarPage = () => {
 
       if (res.ok) {
         alert("Avatar sparad!");
-        navigate("/home");
+        navigate("/profile");
       } else {
         const data = await res.json();
         console.error("Backend fel:", data);
