@@ -29,7 +29,7 @@ const LoginPage = () => {
       if (response.ok) {
         const data = await response.json();
         login(data.access_token, data.refresh_token);
-        navigate("/home", { replace: true }); // navigera direkt efter login
+        navigate("/profile", { replace: true }); // navigera direkt efter login
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Inloggning misslyckades");
