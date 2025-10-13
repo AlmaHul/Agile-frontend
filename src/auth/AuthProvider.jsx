@@ -1,9 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { saveTokens, removeTokens, getAccessToken, decodeToken } from "./authService";
+import { useNavigate } from "react-router-dom";
+
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    const navigate = useNavigate();
+
+
   const [user, setUser] = useState(() => {
     const token = getAccessToken();
     if (!token) return null;
@@ -21,6 +26,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     removeTokens();
     setUser(null);
+    navigate("/", { replace: true });
   };
 
   const isLoggedIn = !!user;
