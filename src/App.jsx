@@ -21,16 +21,9 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+         <Route path="/register"element={<RegisterPage />}/>
 
         {/* Skyddade sidor – kräver inloggning */}
-        <Route
-          path="/register"
-          element={
-            <ProtectedRoute>
-              <RegisterPage />
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/create-avatar"
           element={
