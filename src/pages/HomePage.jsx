@@ -5,6 +5,7 @@ import { API_URL } from "../utils/api";
 import { useAuth } from "../auth/AuthProvider";
 import { fetchWithAuth } from "../auth/authService";
 
+
 const HomePage = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
@@ -139,6 +140,30 @@ const HomePage = () => {
   const handleAcceptInvite = (id) => alert(`Accepterade inbjudan ${id}`);
   const handleDeclineInvite = (id) => alert(`Nekade inbjudan ${id}`);
 
+
+// Markera som klar
+const handleComplete = async (id) => {
+  try {
+    const res = await fetchWithAuth(`${API_URL}challenge/challenges/${id}/complete`, {
+      method: "PATCH",
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || "Failed to complete challenge");
+    }
+    await res.json(); // { message, challenge } om du vill använda det
+
+    // Uppdatera UI
+    setActiveChallenges((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, status: "done" } : c))
+    );
+  } catch (err) {
+    alert("Misslyckades att markera som klar: " + err.message);
+  }
+};
+
+
+
   // ---------------------------
   // Avatar URL
   // ---------------------------
@@ -186,43 +211,49 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* Aktiva utmaningar */}
-      <section className="active-challenges">
-        <h2>Aktiva utmaningar 🔥</h2>
-        {loadingChallenges ? (
-          <p>Laddar utmaningar...</p>
-        ) : activeChallenges.length === 0 ? (
-          <p>Inga aktiva utmaningar just nu</p>
-        ) : (
-          <table className="challenges-table">
-            <thead>
-              <tr>
-                <th>Challenge</th>
-                <th>Status</th>
-                <th>Start</th>
-                <th>Mål</th>
-                <th>Information</th>
-              </tr>
-            </thead>
-            <tbody>
-              {activeChallenges.map((c) => (
-                <tr key={c.id}>
-                  <td>{c.title}</td>
-                  <td>
-                    {c.status === "active" && "🔥 Aktiv"}
-                    {c.status === "done" && "✅ Klar"}
-                  </td>
-                  <td>{c.start}</td>
-                  <td>{c.end}</td>
-                  <td>
-                    <td>{c.description || "Ingen beskrivning"}</td>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
+{/* Aktiva utmaningar */}
+<section className="active-challenges">
+  <h2>Aktiva utmaningar 🔥</h2>
+  {loadingChallenges ? (
+    <p>Laddar utmaningar...</p>
+  ) : activeChallenges.length === 0 ? (
+    <p>Inga aktiva utmaningar just nu</p>
+  ) : (
+    <table className="challenges-table">
+      <thead>
+        <tr>
+          <th>Challenge</th>
+          <th>Status</th>
+          <th>Start</th>
+          <th>Mål</th>
+          <th>Information</th>
+          <th>Åtgärd</th>
+        </tr>
+      </thead>
+      <tbody>
+        {activeChallenges.map((c) => (
+          <tr key={c.id}>
+            <td>{c.title}</td>
+            <td>{c.status === "active" ? "🔥 Aktiv" : "✅ Klar"}</td>
+            <td>{c.start}</td>
+            <td>{c.end}</td>
+            <td>{c.description || "Ingen beskrivning"}</td>
+            <td>
+              {c.status === "active" ? (
+                <button className="avatar-btn" onClick={() => handleComplete(c.id)}>
+                  Markera som klar
+                </button>
+              ) : (
+                <span style={{ color: "green" }}>Klar ✅</span>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</section>
+
 
       {/* Inbjudningar */}
       <section className="invitations">
@@ -254,8 +285,9 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
 
+
+export default HomePage;
 
 
 
