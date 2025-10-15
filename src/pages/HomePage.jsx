@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/HomePage.css";
+import deleteIcon from "../assets/icons/delete.png";
+import updateIcon from "../assets/icons/update.png";
 import { API_URL } from "../utils/api";
 import { useAuth } from "../auth/AuthProvider";
 import { fetchWithAuth } from "../auth/authService";
@@ -47,6 +49,7 @@ const HomePage = () => {
     fetchUserData();
   }, []);
 
+
   // ---------------------------
   // Hämta avatar
   // ---------------------------
@@ -73,37 +76,43 @@ const HomePage = () => {
   }, [user]);
 
   // ---------------------------
-  // Hämta aktiva utmaningar
-  // ---------------------------
-  useEffect(() => {
-    const fetchChallenges = async () => {
-      if (!user?.id) return;
+// Hämta aktiva utmaningar
+// ---------------------------
+const fetchChallenges = async () => {
+  if (!user?.id) return;
 
-      setLoadingChallenges(true);
-      try {
-        const res = await fetchWithAuth(`${API_URL}challenge/challenges`);
-        if (res.ok) {
-          const data = await res.json();
-          const mapped = data.map((c) => ({
-            id: c.id,
-            title: c.title,
-            description: c.description,
-            status: c.score === null ? "active" : "done",
-            start: c.start_at ? c.start_at.split("T")[0] : "",
-            end: c.deadline_at ? c.deadline_at.split("T")[0] : "",
-          }));
-          setActiveChallenges(mapped);
-        } else {
-          console.error("Kunde inte hämta challenges:", res.status);
-        }
-      } catch (err) {
-        console.error("Fel vid hämtning av challenges:", err);
-      } finally {
-        setLoadingChallenges(false);
-      }
-    };
-    fetchChallenges();
-  }, [user]);
+  setLoadingChallenges(true);
+  try {
+    const res = await fetchWithAuth(`${API_URL}challenge/challenges`);
+    if (res.ok) {
+      const data = await res.json();
+      const mapped = data.map((c) => ({
+        id: c.id,
+        title: c.title,
+        description: c.description,
+        status: c.score === null ? "active" : "done",
+        start: c.start_at ? c.start_at.split("T")[0] : "",
+        end: c.deadline_at ? c.deadline_at.split("T")[0] : "",
+        host: c.host?.username || c.host?.email || "Okänd värd",
+        host_id: c.host?.id,
+        participants: c.participants?.map((p) => p.username || p.email) || [],
+      }));
+      setActiveChallenges(mapped);
+    } else {
+      console.error("Kunde inte hämta challenges:", res.status);
+    }
+  } catch (err) {
+    console.error("Fel vid hämtning av challenges:", err);
+  } finally {
+    setLoadingChallenges(false);
+  }
+};
+
+// Kör när komponenten laddas
+useEffect(() => {
+  fetchChallenges();
+}, [user]);
+
 
   // ---------------------------
   // Hämta inbjudningar
@@ -114,7 +123,7 @@ const HomePage = () => {
 
       setLoadingInvites(true);
       try {
-        const res = await fetchWithAuth(`${API_URL}challenge/challenges/invites/me`);
+        const res = await fetchWithAuth(`${API_URL}challenge/invites/me`);
         if (res.ok) {
           const data = await res.json();
           setInvitations(data);
@@ -137,8 +146,67 @@ const HomePage = () => {
   const handleCreateAvatar = () => navigate("/create-avatar");
   const handleUpdateAvatar = () => navigate("/update-avatar");
 
-  const handleAcceptInvite = (id) => alert(`Accepterade inbjudan ${id}`);
-  const handleDeclineInvite = (id) => alert(`Nekade inbjudan ${id}`);
+  // ---------------------------
+// Hantera inbjudningar
+// ---------------------------
+const handleAcceptInvite = async (inviteIdOrToken) => {
+  try {
+    // Hitta invite i state
+    const invite = invitations.find((i) => i.id === inviteIdOrToken);
+    if (!invite) throw new Error("Invite not found");
+
+    const res = await fetchWithAuth(`${API_URL}challenge/invites/${invite.token}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ response: "accept" }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || "Misslyckades att acceptera inbjudan");
+    }
+
+    await res.json();
+
+    // Ta bort invite ur listan
+    setInvitations((prev) => prev.filter((i) => i.id !== invite.id));
+
+    // Ladda om challenges (så den accepterade kommer med)
+    await fetchChallenges();
+
+    alert(`✅ Du har accepterat utmaningen "${invite.challenge_title}"`);
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+const handleDeclineInvite = async (inviteIdOrToken) => {
+  try {
+    const invite = invitations.find((i) => i.id === inviteIdOrToken);
+    if (!invite) throw new Error("Invite not found");
+
+    const res = await fetchWithAuth(`${API_URL}challenge/invites/${invite.token}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ response: "decline" }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || "Misslyckades att neka inbjudan");
+    }
+
+    await res.json();
+
+    // Ta bort invite ur listan
+    setInvitations((prev) => prev.filter((i) => i.id !== invite.id));
+
+    alert(`❌ Du har nekat utmaningen "${invite.challenge_title}"`);
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
 
 
 // Markera som klar
@@ -184,6 +252,29 @@ const handleComplete = async (id) => {
     return `https://avataaars.io/?${params.toString()}`;
   };
 
+
+  const handleDeleteChallenge = async (id) => {
+  if (!window.confirm("Är du säker på att du vill radera denna utmaning?")) return;
+
+  try {
+    const res = await fetchWithAuth(`${API_URL}challenge/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || "Misslyckades att radera utmaning");
+    }
+
+    setActiveChallenges((prev) => prev.filter((c) => c.id !== id));
+    alert("Utmaningen raderades ✅");
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+
+
   return (
     <div className="home-page">
       {/* Välkomstsektion */}
@@ -226,6 +317,8 @@ const handleComplete = async (id) => {
           <th>Status</th>
           <th>Start</th>
           <th>Mål</th>
+            <th>Värd</th>
+          <th>Deltagare</th>
           <th>Information</th>
           <th>Åtgärd</th>
         </tr>
@@ -237,7 +330,14 @@ const handleComplete = async (id) => {
             <td>{c.status === "active" ? "🔥 Aktiv" : "✅ Klar"}</td>
             <td>{c.start}</td>
             <td>{c.end}</td>
-            <td>{c.description || "Ingen beskrivning"}</td>
+            <td>{c.host}</td>
+<td>
+  {c.participants.length > 0
+    ? c.participants.join(", ")
+    : "Inga deltagare ännu"}
+</td>
+
+            <td style={{ maxWidth: "200px" }}>{c.description || "Ingen beskrivning"}</td>
             <td>
               {c.status === "active" ? (
                 <button className="avatar-btn" onClick={() => handleComplete(c.id)}>
@@ -247,6 +347,19 @@ const handleComplete = async (id) => {
                 <span style={{ color: "green" }}>Klar ✅</span>
               )}
             </td>
+            <td>
+  {c.host_id === Number(user?.id) && (
+    <div style={{ display: "flex", gap: "5px" }}>
+      <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
+        <img src={deleteIcon} alt="Ta bort" width={20} />
+      </button>
+      <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
+        <img src={updateIcon} alt="Uppdatera" width={20} />
+      </button>
+    </div>
+  )}
+</td>
+
           </tr>
         ))}
       </tbody>
@@ -268,8 +381,13 @@ const handleComplete = async (id) => {
               <p>
                 {invite.inviter_email} har utmanat dig: <strong>{invite.challenge_title}</strong>
               </p>
-              <button className="avatar-btn" onClick={() => handleAcceptInvite(invite.id)}>Acceptera</button>
-              <button className="avatar-btn" onClick={() => handleDeclineInvite(invite.id)}>Neka</button>
+              <button className="avatar-btn" onClick={() => handleAcceptInvite(invite.id)}>
+  Acceptera
+</button>
+<button className="avatar-btn" onClick={() => handleDeclineInvite(invite.id)}>
+  Neka
+</button>
+
             </div>
           ))
         )}
