@@ -10,6 +10,7 @@ import UpdateAvatarPage from "./pages/UpdateAvatarPage";
 import CreateChallengePage from "./pages/CreateChallengePage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import UpdateChallengePage from "./pages/UpdateChallengePage";
 
 function App() {
   return (
@@ -45,6 +46,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateChallengePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/update-challenge/:challengeId"
+          element={
+            <ProtectedRoute>
+              <UpdateChallengePage />
             </ProtectedRoute>
           }
         />
