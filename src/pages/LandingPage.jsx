@@ -1,6 +1,7 @@
 // LandingPage.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider";
 import "../LandingPage.css";
 import image1 from "../assets/images/landing/image1.jpg";
 import image2 from "../assets/images/landing/image2.jpg";
@@ -8,6 +9,7 @@ import image3 from "../assets/images/landing/image3.jpg";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth(); // Hämta inloggningsstatus
 
   const handleRegisterClick = () => {
     navigate("/register");
@@ -48,9 +50,12 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <button className="btn-primary-large" onClick={handleRegisterClick}>
-            Starta er produktivitetsresa idag
-          </button>
+          {/* Visa knappen ENDAST om användaren INTE är inloggad */}
+          {!isLoggedIn && (
+            <button className="btn-primary-large" onClick={handleRegisterClick}>
+              Starta er produktivitetsresa idag
+            </button>
+          )}
 
           <div className="image-gallery">
             <div className="image-container">
