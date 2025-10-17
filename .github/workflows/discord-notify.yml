@@ -1,9 +1,7 @@
 name: Notify Discord on Push
 
 on:
-  push:
-    branches:
-      - main
+  push
 
 jobs:
   discord_notification:
