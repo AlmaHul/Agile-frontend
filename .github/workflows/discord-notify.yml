@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send message to Discord
-        uses: Ilshidur/action-discord@v1.1.0
+        uses: Ilshidur/action-discord@v0.4.0
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           args: "🚀 Ny commit pushad till **${{ github.repository }}** av **${{ github.actor }}**\n📝 Meddelande: ${{ github.event.head_commit.message }}"
