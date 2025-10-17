@@ -57,10 +57,11 @@ const CreateChallengePage = () => {
     setError("");
     setSubmitting(true);
 
-    const inviteEmails = invites
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
+const inviteEmails = invites
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 
     const startIso = startDate ? toUTCISO(startDate, startTime) : undefined;
 
@@ -136,14 +137,7 @@ const CreateChallengePage = () => {
             onChange={(e) => setDescription(e.target.value)}
           />
 
-          <label htmlFor="invite">Bjud in (e-post, separerade med kommatecken)</label>
-          <input
-            id="invite"
-            type="text"
-            placeholder="vän@site.com, kollega@site.com"
-            value={invites}
-            onChange={(e) => setInvites(e.target.value)}
-          />
+
 
           <label>Startdatum och tid</label>
           <div style={{ display: "flex", gap: 10 }}>
