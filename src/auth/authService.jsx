@@ -1,21 +1,66 @@
 const ACCESS_TOKEN_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
 
-// ✅ Spara tokens
+// ✅ Spara tokens med timestamp när sidan stängs/lämnas
+export const setupTokenCleanup = () => {
+  // Spara tidpunkt när användaren lämnar sidan
+  const handlePageUnload = () => {
+    const exitTime = Date.now();
+    localStorage.setItem("page_exit_timestamp", exitTime);
+  };
+
+  // Lägg till event listeners för när sidan stängs/lämnas
+  window.addEventListener('beforeunload', handlePageUnload);
+  window.addEventListener('pagehide', handlePageUnload);
+  window.addEventListener('unload', handlePageUnload);
+
+  // Kontrollera vid sidstart om tokens ska raderas
+  const checkTokenExpiry = () => {
+    const exitTime = localStorage.getItem("page_exit_timestamp");
+    const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+    
+    if (exitTime && token) {
+      const timeSinceExit = (Date.now() - parseInt(exitTime)) / 1000;
+      
+      if (timeSinceExit > 30) {
+        // För mer än 30 sek sedan - radera tokens
+        removeTokens();
+        localStorage.removeItem("page_exit_timestamp");
+      }
+    }
+  };
+
+  // Kör kontrollen när sidan laddas
+  checkTokenExpiry();
+};
+
+// ✅ Spara tokens (oförändrad)
 export const saveTokens = (accessToken, refreshToken) => {
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+  // Ta bort exit timestamp när nya tokens sparas
+  localStorage.removeItem("page_exit_timestamp");
 };
 
-// ✅ Hämta tokens
-export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);
-export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY);
+// ✅ Hämta tokens (utan tidskontroll)
+export const getAccessToken = () => {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+};
+
+export const getRefreshToken = () => {
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+};
 
 // ✅ Ta bort tokens
 export const removeTokens = () => {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem("page_exit_timestamp");
 };
+
+// ✅ Initiera token cleanup när din app startar
+setupTokenCleanup();
+
 
 
 // ✅ Dekoda token
