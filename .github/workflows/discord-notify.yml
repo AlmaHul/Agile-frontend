@@ -1,15 +1,45 @@
-name: Notify Discord on Push
+name: Run Pytest and Notify Discord
 
 on:
   push
 
 jobs:
-  discord_notification:
+  test_and_notify:
     runs-on: ubuntu-latest
     steps:
+      # Klona repot
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Installera Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'   # du kan ändra version om du vill
+
+      #  Installera beroenden
+      - name: Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest
+
+      # Kör pytest
+      - name: Run pytest
+        run: pytest || true   # kör även om testerna failar, så Discord-steget fortfarande körs
+
+      # Skicka notis till Discord
+      - name: Run pytest
+        id: run_pytest
+        run: pytest
+
       - name: Send message to Discord
+        if: always()
         uses: "Ilshidur/action-discord@0.4.0"
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
-          args: "🚀 Ny commit pushad till **${{ github.repository }}** av **${{ github.actor }}**\n📝 Meddelande: ${{ github.event.head_commit.message }}"
+          args: |
+            🚀 Ny commit pushad till **${{ github.repository }}**
+            👤 Av: **${{ github.actor }}**
+            🧪 Pytest resultat: ${{ job.status }}
+            📝 Meddelande: ${{ github.event.head_commit.message }}
