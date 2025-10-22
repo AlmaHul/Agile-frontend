@@ -6,6 +6,7 @@ import updateIcon from "../assets/icons/update.png";
 import { API_URL } from "../utils/api";
 import { useAuth } from "../auth/AuthProvider";
 import { fetchWithAuth } from "../auth/authService";
+import ChallengeParticipants from "../components/ChallengeParticipants";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -112,7 +113,11 @@ const HomePage = () => {
           end: c.deadline_at ? c.deadline_at.split("T")[0] : "",
           host: c.host?.username || c.host?.email || "Okänd värd",
           host_id: c.host?.id,
-          participants: c.participants?.map((p) => p.username || p.email) || [],
+          participants: c.participants?.map((p) => ({
+            id: p.id,
+            username: p.username || p.email,
+            status: p.status
+          })) || [],
         }));
         setActiveChallenges(mapped);
       } else {
@@ -217,57 +222,7 @@ const HomePage = () => {
   const handleCreateAvatar = () => navigate("/create-avatar");
   const handleUpdateAvatar = () => navigate("/update-avatar");
 
-  // ---------------------------
-  // Hantera inbjudningar
-  // ---------------------------
-  const handleAcceptInvite = async (inviteIdOrToken) => {
-    try {
-      const invite = invitations.find((i) => i.id === inviteIdOrToken);
-      if (!invite) throw new Error("Invite not found");
 
-      const res = await fetchWithAuth(`${API_URL}challenge/invites/${invite.token}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ response: "accept" }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Misslyckades att acceptera inbjudan");
-      }
-
-      await res.json();
-      setInvitations((prev) => prev.filter((i) => i.id !== invite.id));
-      await fetchChallenges();
-      alert(`✅ Du har accepterat utmaningen "${invite.challenge_title}"`);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
-  const handleDeclineInvite = async (inviteIdOrToken) => {
-    try {
-      const invite = invitations.find((i) => i.id === inviteIdOrToken);
-      if (!invite) throw new Error("Invite not found");
-
-      const res = await fetchWithAuth(`${API_URL}challenge/invites/${invite.token}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ response: "decline" }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Misslyckades att neka inbjudan");
-      }
-
-      await res.json();
-      setInvitations((prev) => prev.filter((i) => i.id !== invite.id));
-      alert(`❌ Du har nekat utmaningen "${invite.challenge_title}"`);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
 
   const handleComplete = async (id) => {
     try {
@@ -306,6 +261,7 @@ const HomePage = () => {
       alert(err.message);
     }
   };
+
 
   // ---------------------------
   // Avatar URL
@@ -470,70 +426,52 @@ const HomePage = () => {
               </tr>
             </thead>
             <tbody>
-              {activeChallenges.map((c) => (
-                <tr key={c.id}>
-                  <td>{c.title}</td>
-                  <td>{c.status === "active" ? "🔥 Aktiv" : "✅ Klar"}</td>
-                  <td>{c.start}</td>
-                  <td>{c.end}</td>
-                  <td>{c.host}</td>
-                  <td>
-                    {c.participants.length > 0
-                      ? c.participants.join(", ")
-                      : "Inga deltagare ännu"}
-                  </td>
-                  <td style={{ maxWidth: "200px" }}>{c.description || "Ingen beskrivning"}</td>
-                  <td>
-                    {c.status === "active" ? (
-                      <button className="avatar-btn" onClick={() => handleComplete(c.id)}>
-                        Markera som klar
-                      </button>
-                    ) : (
-                      <span style={{ color: "green" }}>Klar ✅</span>
-                    )}
-                  </td>
-                  <td>
-                    {c.host_id === Number(user?.id) && (
-                      <div style={{ display: "flex", gap: "5px" }}>
-                        <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
-                          <img src={deleteIcon} alt="Ta bort" width={20} />
-                        </button>
-                        <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
-                          <img src={updateIcon} alt="Uppdatera" width={20} />
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {activeChallenges.map((c) => (
+    <tr key={c.id}>
+      <td data-label="Challenge">{c.title}</td>
+      <td data-label="Status">{c.status === "active" ? "🔥 Aktiv" : "✅ Klar"}</td>
+      <td data-label="Start">{c.start}</td>
+      <td data-label="Mål">{c.end}</td>
+      <td data-label="Värd">{c.host}</td>
+      <td data-label="Deltagare">
+        <ChallengeParticipants
+          challengeId={c.id}
+          participants={c.participants}
+        />
+      </td>
+      <td data-label="Information" style={{ maxWidth: "200px" }}>
+        {c.description || "Ingen beskrivning"}
+      </td>
+      <td data-label="Åtgärd">
+        {c.status === "active" ? (
+          <button className="avatar-btn" onClick={() => handleComplete(c.id)}>
+            Markera som klar
+          </button>
+        ) : (
+          <span style={{ color: "green" }}>Klar ✅</span>
+        )}
+      </td>
+      <td data-label="Admin">
+        {c.host_id === Number(user?.id) && (
+          <div style={{ display: "flex", gap: "5px" }}>
+            <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
+              <img src={deleteIcon} alt="Ta bort" width={20} />
+            </button>
+            <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
+              <img src={updateIcon} alt="Uppdatera" width={20} />
+            </button>
+          </div>
+        )}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </table>
         )}
       </section>
 
-      {/* Inbjudningar */}
-      <section className="invitations">
-        <h2>Inbjudningar 📩</h2>
-        {loadingInvites ? (
-          <p>Laddar inbjudningar...</p>
-        ) : invitations.length === 0 ? (
-          <p>Inga nya inbjudningar</p>
-        ) : (
-          invitations.map((invite) => (
-            <div key={invite.id} className="invite-card">
-              <p>
-                {invite.inviter_email} har utmanat dig: <strong>{invite.challenge_title}</strong>
-              </p>
-              <button className="avatar-btn" onClick={() => handleAcceptInvite(invite.id)}>
-                Acceptera
-              </button>
-              <button className="avatar-btn" onClick={() => handleDeclineInvite(invite.id)}>
-                Neka
-              </button>
-            </div>
-          ))
-        )}
-      </section>
+
 
       {/* Skapa ny utmaning */}
       <section className="create-challenge">
