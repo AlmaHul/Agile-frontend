@@ -6,6 +6,15 @@
   background: linear-gradient(180deg, #f7f9fc 0%, #e8ecf5 100%);
   font-family: "Inter", sans-serif;
 }
+.all-challenges-page {
+  flex-direction: column;
+  margin: 50px;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7f9fc 0%, #e8ecf5 100%);
+  font-family: "Inter", sans-serif;
+}
 
 /* --- WELCOME SECTION --- */
 .welcome {
@@ -281,6 +290,109 @@ button:hover {
 @media (max-width: 480px) {
   .search-input {
     width: 250px;
+    font-size: 0.9rem;
+  }
+}
+
+/* --- RESPONSIVE CHALLENGE TABLE --- */
+/* --- Responsiv justering för små skärmar --- */
+@media (max-width: 768px) {
+  .all-challenges-page {
+    margin: 20px; /* mindre margin på tablet/mobil */
+    padding: 0 10px; /* lite padding för innehåll */
+  }
+
+  .home-page section {
+    padding: 0 10px; /* minskar padding på sektioner */
+  }
+
+  .challenges-table th,
+  .challenges-table td {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .all-challenges-page {
+    margin: 10px;
+    padding: 0 5px;
+  }
+
+  .challenges-table th,
+  .challenges-table td {
+    padding: 4px 6px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .challenges-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .challenges-table thead {
+    display: none; /* döljer header */
+  }
+
+  .challenges-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .challenges-table tr {
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  .challenges-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+  }
+
+  .challenges-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* Lägg till rubrik på varje cell */
+  .challenges-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #666;
+    flex: 1;
+  }
+
+  .challenges-table td span {
+    flex: 1;
+    text-align: right;
+  }
+}
+
+@media (max-width: 480px) {
+  .challenges-table tr {
+    padding: 12px;
+  }
+
+  .challenges-table td::before {
+    font-size: 0.85rem;
+  }
+
+  .challenges-table td span {
+    font-size: 0.85rem;
+  }
+
+  .avatar-btn {
+    padding: 6px 12px;
     font-size: 0.9rem;
   }
 }
