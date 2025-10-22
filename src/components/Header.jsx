@@ -27,10 +27,10 @@ export default function Header() {
           <>
             <button onClick={logout}>Logga ut</button>
             {/* Profilknappen navigerar till /home */}
-            <button
-              className="profile-btn"
-              onClick={() => navigate("/profile")}
-            ></button>
+              <button className="header-button" onClick={() => navigate("/profile")}>
+                Profil
+              </button>
+
             <button
               onClick={() => navigate("/all-challenges")}
             >Alla utmaningar</button>
