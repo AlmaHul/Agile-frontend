@@ -31,6 +31,9 @@ export default function Header() {
               className="profile-btn"
               onClick={() => navigate("/profile")}
             ></button>
+            <button
+              onClick={() => navigate("/all-challenges")}
+            >Alla utmaningar</button>
           </>
         )}
       </div>
