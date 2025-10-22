@@ -11,6 +11,7 @@ import CreateChallengePage from "./pages/CreateChallengePage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import UpdateChallengePage from "./pages/UpdateChallengePage";
+import AllChallengesPage from "./pages/AllChallengesPage";
 
 function App() {
   return (
@@ -62,6 +63,14 @@ function App() {
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/all-challenges"
+          element={
+            <ProtectedRoute>
+              <AllChallengesPage />
             </ProtectedRoute>
           }
         />
