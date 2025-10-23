@@ -1,0 +1,132 @@
+/* ---------- Base layout ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background-color: #ffa94d1a;
+}
+
+.logo-small {
+  width: 40px;
+  height: 40px;
+}
+
+/* Buttons container (desktop) */
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Hamburger (hidden on desktop) */
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: #ffffffcc;          /* syns mot orange */
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+  z-index: 10;                     /* om något skulle ligga över */
+}
+
+.nav-toggle:hover { background:#fff; transform: scale(1.05); }
+
+/* De tre strecken */
+.bar {
+  display: block;
+  width: 22px;
+  height: 3px;
+  margin: 4px auto;
+  border-radius: 2px;
+  background: #222;                /* mörk så den syns */
+}
+
+/* ---------- Mobile layout ---------- */
+@media (max-width: 768px) {
+  /* Visa hamburgaren */
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Dölj knapparna som standard, visa som panel när open */
+  .header-buttons {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 12px;
+    flex-direction: column;
+    background: white;
+    border: 1px solid #0001;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 30px #0002;
+    min-width: 200px;
+  }
+
+  .header-buttons.is-open {
+    display: flex;
+  }
+
+  /* Om något globalt nollar span, säkerställ färg/visning på mobil */
+  .header .nav-toggle .bar {
+    display: block !important;
+    background: #222 !important;
+  }
+  /* Place header as positioning context */
+.header { position: relative; }
+
+/* Mobile overrides */
+@media (max-width: 768px) {
+  /* Put the toggle at the right edge, top of the header */
+  .nav-toggle {
+    display: inline-block;             /* visible on mobile */
+    position: absolute;
+    right: 12px;
+    top: 8px;
+
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: #ffffff;               /* button base */
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    cursor: pointer;
+  }
+
+  /* Draw the 3 bars directly in the button background (no span needed) */
+  .nav-toggle {
+    background-image:
+      linear-gradient(#1f2937, #1f2937),
+      linear-gradient(#1f2937, #1f2937),
+      linear-gradient(#1f2937, #1f2937);
+    background-repeat: no-repeat;
+    background-size: 22px 2.5px, 22px 2.5px, 22px 2.5px;
+    background-position: center 14px, center, center 30px;
+  }
+
+  /* If old <span class="bar"> exists, just hide to avoid conflicts */
+  .nav-toggle .bar { display: none !important; }
+
+  /* Your menu panel rules can stay som de är (visa/dölj) */
+  .header-buttons {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 12px;
+    flex-direction: column;
+    background: white;
+    border: 1px solid #0001;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 30px #0002;
+    min-width: 200px;
+  }
+  .header-buttons.is-open { display: flex; }
+}
+
+}
