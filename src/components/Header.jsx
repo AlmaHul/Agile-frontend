@@ -32,7 +32,7 @@ export default function Header() {
       {/* ✅ Wrap your buttons inside a nav container */}
       <div className={`header-buttons ${open ? "is-open" : ""}`}>
         {/* Home button always visible except on "/" */}
-        {location.pathname !== "/" && (
+        {!user && location.pathname !== "/" && (
           <button onClick={() => { navigate("/"); setOpen(false); }}>Home</button>
         )}
 
