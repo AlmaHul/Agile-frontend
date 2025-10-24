@@ -222,8 +222,6 @@ const HomePage = () => {
   const handleCreateAvatar = () => navigate("/create-avatar");
   const handleUpdateAvatar = () => navigate("/update-avatar");
 
-
-
   const handleComplete = async (id) => {
     try {
       const res = await fetchWithAuth(`${API_URL}challenge/challenges/${id}/complete`, {
@@ -261,7 +259,6 @@ const HomePage = () => {
       alert(err.message);
     }
   };
-
 
   // ---------------------------
   // Avatar URL
@@ -352,7 +349,7 @@ const HomePage = () => {
             )}
           </div>
 
-          {/* Sökresultat Dropdown */}
+          {/* Sökresultat Dropdown - KORRIGERAD: länkar till profiler */}
           {showSearchResults && (
             <div className="search-results-dropdown">
               {isSearching ? (
@@ -363,8 +360,8 @@ const HomePage = () => {
                     key={user.id}
                     className="search-result-item"
                     onClick={() => {
-                      console.log('Selected user:', user);
-                      alert(`Vald användare: ${user.username} (ID: ${user.id})`);
+                      // KORRIGERAD: Navigera till användarens profil istället för alert
+                      navigate(`/user/${user.id}`);
                       clearSearch();
                     }}
                   >
@@ -419,59 +416,56 @@ const HomePage = () => {
                 <th>Status</th>
                 <th>Start</th>
                 <th>Mål</th>
-                <th>Värd</th>
+                <th>Admin</th>
                 <th>Deltagare</th>
                 <th>Information</th>
                 <th>Åtgärd</th>
               </tr>
             </thead>
             <tbody>
-  {activeChallenges.map((c) => (
-    <tr key={c.id}>
-      <td data-label="Challenge">{c.title}</td>
-      <td data-label="Status">{c.status === "active" ? "🔥 Aktiv" : "✅ Klar"}</td>
-      <td data-label="Start">{c.start}</td>
-      <td data-label="Mål">{c.end}</td>
-      <td data-label="Värd">{c.host}</td>
-      <td data-label="Deltagare">
-        <ChallengeParticipants
-          challengeId={c.id}
-          participants={c.participants}
-        />
-      </td>
-      <td data-label="Information" style={{ maxWidth: "200px" }}>
-        {c.description || "Ingen beskrivning"}
-      </td>
-      <td data-label="Åtgärd">
-        {c.status === "active" ? (
-          <button className="avatar-btn" onClick={() => handleComplete(c.id)}>
-            Markera som klar
-          </button>
-        ) : (
-          <span style={{ color: "green" }}>Klar ✅</span>
-        )}
-      </td>
-      <td data-label="Admin">
-        {c.host_id === Number(user?.id) && (
-          <div style={{ display: "flex", gap: "5px" }}>
-            <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
-              <img src={deleteIcon} alt="Ta bort" width={20} />
-            </button>
-            <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
-              <img src={updateIcon} alt="Uppdatera" width={20} />
-            </button>
-          </div>
-        )}
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+              {activeChallenges.map((c) => (
+                <tr key={c.id}>
+                  <td data-label="Challenge">{c.title}</td>
+                  <td data-label="Status">{c.status === "active" ? "🔥 Aktiv" : "✅ Klar"}</td>
+                  <td data-label="Start">{c.start}</td>
+                  <td data-label="Mål">{c.end}</td>
+                  <td data-label="Värd">{c.host}</td>
+                  <td data-label="Deltagare">
+                    <ChallengeParticipants
+                      challengeId={c.id}
+                      participants={c.participants}
+                    />
+                  </td>
+                  <td data-label="Information" style={{ maxWidth: "200px" }}>
+                    {c.description || "Ingen beskrivning"}
+                  </td>
+                  <td data-label="Åtgärd">
+                    {c.status === "active" ? (
+                      <button className="avatar-btn" onClick={() => handleComplete(c.id)}>
+                        Markera som klar
+                      </button>
+                    ) : (
+                      <span style={{ color: "green" }}>Klar ✅</span>
+                    )}
+                  </td>
+                  <td data-label="Admin">
+                    {c.host_id === Number(user?.id) && (
+                      <div style={{ display: "flex", gap: "5px" }}>
+                        <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
+                          <img src={deleteIcon} alt="Ta bort" width={20} />
+                        </button>
+                        <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
+                          <img src={updateIcon} alt="Uppdatera" width={20} />
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         )}
       </section>
-
-
 
       {/* Skapa ny utmaning */}
       <section className="create-challenge">

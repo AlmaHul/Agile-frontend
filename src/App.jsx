@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import UpdateChallengePage from "./pages/UpdateChallengePage";
 import AllChallengesPage from "./pages/AllChallengesPage";
+import UserProfilePage from "./pages/UserProfilePage";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-         <Route path="/register"element={<RegisterPage />}/>
+        <Route path="/register" element={<RegisterPage />} />
 
         {/* Skyddade sidor – kräver inloggning */}
         <Route
@@ -71,6 +72,16 @@ function App() {
           element={
             <ProtectedRoute>
               <AllChallengesPage />
+            </ProtectedRoute>
+          }
+        />
+        
+        {/* ← NY ROUTE - Lägg till den INNAN 404-sidan */}
+        <Route
+          path="/user/:userId"
+          element={
+            <ProtectedRoute>
+              <UserProfilePage />
             </ProtectedRoute>
           }
         />
