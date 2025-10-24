@@ -1,6 +1,6 @@
-// LandingPage.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider";
 import "../LandingPage.css";
 import image1 from "../assets/images/landing/image1.jpg";
 import image2 from "../assets/images/landing/image2.jpg";
@@ -8,6 +8,14 @@ import image3 from "../assets/images/landing/image3.jpg";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth(); // Hämta inloggningsstatus
+
+  // ✅ Redirect inloggade användare direkt till /profile
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/profile");
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleRegisterClick = () => {
     navigate("/register");
@@ -21,11 +29,10 @@ const LandingPage = () => {
     <div className="landing-page">
       <section className="hero-section">
         <div className="hero-content-centered">
-          {/* Alternativ proffsigare version */}
           <h1 className="hero-title">
             Transformera era mål till gemensamma framgångar med Jöra
           </h1>
-          
+
           <div className="features-section">
             <p className="features-title">Effektivisera ert samarbete</p>
             <div className="features-list">
@@ -48,9 +55,11 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <button className="btn-primary-large" onClick={handleRegisterClick}>
-            Starta er produktivitetsresa idag
-          </button>
+          {!isLoggedIn && (
+            <button className="btn-primary-large" onClick={handleRegisterClick}>
+              Starta er produktivitetsresa idag
+            </button>
+          )}
 
           <div className="image-gallery">
             <div className="image-container">

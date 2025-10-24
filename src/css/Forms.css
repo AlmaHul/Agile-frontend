@@ -5,19 +5,30 @@
   padding: 1px 30px;
   height: 70px;
   background: linear-gradient(135deg, #FFB347, #FFCC70); /* ljus orange gradient */
-  border-radius: 20px; /* rundar alla hörn */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* mjuk skugga */
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
-/* Knapparna till vänster */
+.logo {
+  border-radius: 20px; /* mjuka kurvor */
+  box-shadow: 5px 5px 20px rgba(0,0,0,0.3); /* ger djup */
+  transform: perspective(500px) rotateX(5deg) rotateY(5deg); /* lätt 3D-lutning */
+}
+
+
+
+/* Knapparna till höger */
 .header-buttons {
   display: flex;
   gap: 15px;
+  margin-left: auto; /* trycker knapparna till höger */
+  align-items: center;
 }
 
+/* Vanliga knappar */
 .header-buttons button {
-  background-color: #ffffff; /* vit bakgrund */
-  color: #0c03f7; /* blå text */
+  background-color: #ffffff;
+  color: #0c03f7;
   border: none;
   padding: 8px 16px;
   border-radius: 25px;
@@ -28,19 +39,55 @@
 }
 
 .header-buttons button:hover {
-  background-color: #e6e6ff; /* ljus blå vid hover */
+  background-color: #e6e6ff;
   transform: translateY(-2px);
 }
 
-
-/* Loggan till höger */
-.logo-small {
-  height: 70px; /* lite större logga */
-  width: auto;
-  border-radius: 15px; /* rundade hörn */
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+/* Profil-knappen som CSS-ikon */
+.header-buttons .profile-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #0c03f7;
+  border: none;
+  cursor: default;
+  position: relative;
+  flex-shrink: 0; /* hindrar att den krymper */
 }
 
+/* Profilhuvud */
+.header-buttons .profile-btn::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: white;
+}
+
+/* Profilkropp */
+.header-buttons .profile-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 12px;
+  border-radius: 12px / 6px;
+  background-color: white;
+}
+
+/* Loggan till vänster */
+.logo-small {
+  height: 70px;
+  width: auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
 
 /* LoginPage och RegisterPage */
 body, html {
@@ -69,7 +116,7 @@ body, html {
 
 .form-container h1 {
   margin-bottom: 20px;
-  color: #001f4d; /* mörkblå text för titeln */
+  color: #001f4d;
 }
 
 .form-container label {
@@ -92,8 +139,8 @@ body, html {
 .form-container button {
   width: 100%;
   padding: 10px;
-  background-color: #ff7f00; /* orange */
-  color: #001f4d; /* mörkblå text */
+  background-color: #ff7f00;
+  color: #001f4d;
   border: none;
   border-radius: 8px;
   font-weight: bold;
@@ -102,13 +149,14 @@ body, html {
 }
 
 .form-container button:hover {
-  background-color: #e66b00; /* lite mörkare orange vid hover */
+  background-color: #e66b00;
 }
 
 .error {
   color: red;
   margin-bottom: 10px;
 }
+
 .logo {
   width: 120px;
   height: auto;
