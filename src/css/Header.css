@@ -128,5 +128,36 @@
   }
   .header-buttons.is-open { display: flex; }
 }
+/* --- Fix för mobilmenyn över sökrutan --- */
+
+/* Se till att header är positionerings-kontext */
+.header { position: relative; }
+
+/* Mobil: visa panelen med högt z-index */
+@media (max-width: 768px) {
+  .header-buttons {
+    display: none;                 /* default dold */
+    position: absolute;
+    top: 60px;
+    right: 12px;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #0001;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 30px #0002;
+    min-width: 200px;
+    z-index: 9999;                 /* VIKTIGT: över sökrutan */
+  }
+  .header-buttons.is-open { display: flex; }
+}
+
+/* Om sökrutan har hög z-index, sänk den lite */
+.search-wrapper, .search-input {
+  position: relative;
+  z-index: 1;
+}
+
+
 
 }
