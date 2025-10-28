@@ -7,6 +7,7 @@ import { API_URL } from "../utils/api";
 import { useAuth } from "../auth/AuthProvider";
 import { fetchWithAuth } from "../auth/authService";
 import ChallengeParticipants from "../components/ChallengeParticipants";
+import ParticipantActionDropdown from "../components/ParticipantActionDropdown";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -30,6 +31,21 @@ const HomePage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
+
+  function formatResult(result) {
+  switch (result) {
+    case "done":
+      return "Klar ✅";
+    case "did_not_pass":
+      return "Klarade inte ❌";
+    case null:
+    case undefined:
+      return "Active 🔥";
+    default:
+      return "Active 🔥";
+  }
+}
+
 
   // ---------------------------
   // Hämta inloggad användare med felhantering
@@ -136,33 +152,6 @@ const HomePage = () => {
     }
   }, [user]);
 
-  // ---------------------------
-  // Hämta inbjudningar
-  // ---------------------------
-  useEffect(() => {
-    const fetchInvites = async () => {
-      if (!user?.id) return;
-
-      setLoadingInvites(true);
-      try {
-        const res = await fetchWithAuth(`${API_URL}challenge/invites/me`);
-        if (res.ok) {
-          const data = await res.json();
-          setInvitations(data);
-        } else {
-          console.error("Kunde inte hämta inbjudningar:", res.status);
-        }
-      } catch (err) {
-        console.error("Fel vid hämtning av inbjudningar:", err);
-      } finally {
-        setLoadingInvites(false);
-      }
-    };
-    
-    if (user) {
-      fetchInvites();
-    }
-  }, [user]);
 
   // ---------------------------
   // User Search Funktion
@@ -222,23 +211,63 @@ const HomePage = () => {
   const handleCreateAvatar = () => navigate("/create-avatar");
   const handleUpdateAvatar = () => navigate("/update-avatar");
 
-  const handleComplete = async (id) => {
-    try {
-      const res = await fetchWithAuth(`${API_URL}challenge/challenges/${id}/complete`, {
-        method: "PATCH",
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Failed to complete challenge");
-      }
-      await res.json();
-      setActiveChallenges((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, status: "done" } : c))
-      );
-    } catch (err) {
-      alert("Misslyckades att markera som klar: " + err.message);
-    }
-  };
+  const handleMarkDone = async (challengeId) => {
+  try {
+    const res = await fetchWithAuth(`${API_URL}challenge/${challengeId}/complete`, {
+      method: "PATCH",
+    });
+    if (!res.ok) throw new Error("Misslyckades att markera som klar");
+    const data = await res.json();
+
+    // Uppdatera state direkt
+    setActiveChallenges(prev =>
+      prev.map(c =>
+        c.id === challengeId
+          ? {
+              ...c,
+              participants: c.participants.map(p =>
+                p.id === Number(user?.id)
+                  ? { ...p, result: "done", status: "joined" }
+                  : p
+              )
+            }
+          : c
+      )
+    );
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+const handleMarkDidNotPass = async (challengeId) => {
+  try {
+    const res = await fetchWithAuth(`${API_URL}challenge/${challengeId}/did_not_pass`, {
+      method: "PATCH",
+    });
+    if (!res.ok) throw new Error("Misslyckades att markera som ej klar");
+    const data = await res.json();
+
+    // Uppdatera state direkt
+    setActiveChallenges(prev =>
+      prev.map(c =>
+        c.id === challengeId
+          ? {
+              ...c,
+              participants: c.participants.map(p =>
+                p.id === Number(user?.id)
+                  ? { ...p, result: "did_not_pass", status: "joined" }
+                  : p
+              )
+            }
+          : c
+      )
+    );
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+
 
   const handleDeleteChallenge = async (id) => {
     if (!window.confirm("Är du säker på att du vill radera denna utmaning?")) return;
@@ -325,7 +354,12 @@ const HomePage = () => {
     <div className="home-page">
       {/* Välkomstsektion med sökfält */}
       <section className="welcome">
-        <h1>Hej {userData?.username || user?.username || "Gäst"}! 👋</h1>
+        <h1>
+  Hej {((userData?.username || user?.username || "Gäst").length > 10
+        ? (userData?.username || user?.username).slice(0, 10) + "…"
+        : userData?.username || user?.username || "Gäst")}! 👋
+</h1>
+
         
         {/* User Search Section */}
         <div className="user-search-container">
@@ -416,7 +450,7 @@ const HomePage = () => {
                 <th>Status</th>
                 <th>Start</th>
                 <th>Mål</th>
-                <th>Admin</th>
+                <th>Värd</th>
                 <th>Deltagare</th>
                 <th>Information</th>
                 <th>Åtgärd</th>
@@ -426,7 +460,10 @@ const HomePage = () => {
               {activeChallenges.map((c) => (
                 <tr key={c.id}>
                   <td data-label="Challenge">{c.title}</td>
-                  <td data-label="Status">{c.status === "active" ? "🔥 Aktiv" : "✅ Klar"}</td>
+                  <td data-label="Status">
+  {formatResult(c.participants.find(p => p.id === Number(user?.id))?.result)}
+</td>
+
                   <td data-label="Start">{c.start}</td>
                   <td data-label="Mål">{c.end}</td>
                   <td data-label="Värd">{c.host}</td>
@@ -440,26 +477,33 @@ const HomePage = () => {
                     {c.description || "Ingen beskrivning"}
                   </td>
                   <td data-label="Åtgärd">
-                    {c.status === "active" ? (
-                      <button className="avatar-btn" onClick={() => handleComplete(c.id)}>
-                        Markera som klar
-                      </button>
-                    ) : (
-                      <span style={{ color: "green" }}>Klar ✅</span>
-                    )}
-                  </td>
+  <ParticipantActionDropdown
+    participant={c.participants.find(p => p.id === Number(user?.id) && p.status === "joined")}
+    handleMarkDone={handleMarkDone}
+    handleMarkDidNotPass={handleMarkDidNotPass}
+    challengeId={c.id}
+  />
+</td>
+
+
                   <td data-label="Admin">
-                    {c.host_id === Number(user?.id) && (
-                      <div style={{ display: "flex", gap: "5px" }}>
-                        <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
-                          <img src={deleteIcon} alt="Ta bort" width={20} />
-                        </button>
-                        <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
-                          <img src={updateIcon} alt="Uppdatera" width={20} />
-                        </button>
-                      </div>
-                    )}
-                  </td>
+  {c.host_id === Number(user?.id) && (
+    <div style={{ display: "flex", gap: "5px" }}>
+      {/* Delete-knappen visas alltid för host */}
+      <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
+        <img src={deleteIcon} alt="Ta bort" width={20} />
+      </button>
+
+      {/* Update-knappen visas endast om inga deltagare finns */}
+      {c.participants.length === 0 && (
+        <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
+          <img src={updateIcon} alt="Uppdatera" width={20} />
+        </button>
+      )}
+    </div>
+  )}
+</td>
+
                 </tr>
               ))}
             </tbody>
