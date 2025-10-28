@@ -14,9 +14,7 @@ const AllChallengesPage = () => {
   const [loadingChallenges, setLoadingChallenges] = useState(true);
   const [error, setError] = useState(null);
 
-  // ---------------------------
-  // Hämta ALLA challenges
-  // ---------------------------
+  // Hämta alla challenges
   const fetchAllChallenges = async () => {
     if (!user?.id) return;
 
@@ -34,7 +32,7 @@ const AllChallengesPage = () => {
           host: c.host?.username || c.host?.email || "Okänd värd",
           host_id: c.host?.id,
           participants: c.participants?.map((p) => ({
-            id: p.id,
+            user_id: p.id,
             username: p.username || p.email,
             status: p.status
           })) || [],
@@ -54,68 +52,38 @@ const AllChallengesPage = () => {
     fetchAllChallenges();
   }, []);
 
-  // ---------------------------
-// Gå med / Gå ur challenge
-// ---------------------------
-const handleToggleParticipation = async (challengeId, isJoined) => {
-  try {
-    const url = `${API_URL}challenge/${challengeId}/${isJoined ? "leave" : "join"}`;
-    const res = await fetchWithAuth(url, {
-      method: "POST",
-    });
-
-    if (res.ok) {
-      // Uppdatera listan med challenges
-      fetchAllChallenges();
-    } else {
-      const data = await res.json();
-      alert(data.error || "Kunde inte uppdatera deltagande");
+  // Gå med / gå ur
+  const handleToggleParticipation = async (challengeId, isJoined) => {
+    try {
+      const url = `${API_URL}challenge/${challengeId}/${isJoined ? "leave" : "join"}`;
+      const res = await fetchWithAuth(url, { method: "POST" });
+      if (res.ok) fetchAllChallenges();
+      else {
+        const data = await res.json();
+        alert(data.error || "Kunde inte uppdatera deltagande");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Fel vid uppdatering av deltagande");
     }
-  } catch (err) {
-    console.error("Fel vid uppdatering av deltagande:", err);
-    alert("Fel vid uppdatering av deltagande");
-  }
-};
+  };
 
+  // Loading / error
+  if (loadingChallenges) return <div className="loading">Laddar challenges...</div>;
+  if (error) return (
+    <div className="error-message">
+      <p>{error}</p>
+      <button onClick={fetchAllChallenges} className="avatar-btn">Försök igen</button>
+    </div>
+  );
+  if (!user || !isLoggedIn) return (
+    <div>
+      <p>Du är inte inloggad</p>
+      <button onClick={() => navigate('/login')} className="avatar-btn">Logga in</button>
+    </div>
+  );
 
-  // ---------------------------
-  // Rendering
-  // ---------------------------
-  if (loadingChallenges) {
-    return (
-      <div className="home-page">
-        <div className="loading">Laddar challenges...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="home-page">
-        <div className="error-message">
-          <h2>Ett fel uppstod</h2>
-          <p>{error}</p>
-          <button onClick={() => fetchAllChallenges()} className="avatar-btn">
-            Försök igen
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user || !isLoggedIn) {
-    return (
-      <div className="home-page">
-        <div className="not-logged-in">
-          <h2>Du är inte inloggad</h2>
-          <button onClick={() => navigate('/login')} className="avatar-btn">
-            Logga in
-          </button>
-        </div>
-      </div>
-    );
-  }
-
+  // Main render
   return (
     <div className="all-challenges-page">
       <section className="active-challenges">
@@ -136,40 +104,38 @@ const handleToggleParticipation = async (challengeId, isJoined) => {
               </tr>
             </thead>
             <tbody>
-              {activeChallenges.map((c) => (
-                <tr key={c.id}>
-                  <td data-label="Challenge">{c.title}</td>
-                  <td data-label="Start">{c.start}</td>
-                  <td data-label="Mål">{c.end}</td>
-                  <td data-label="Värd">{c.host}</td>
-                  <td data-label="Deltagare">
-  <ChallengeParticipants
-    challengeId={c.id}
-    participants={c.participants}
-  />
-</td>
-                 <td data-label="Information"  style={{ maxWidth: "200px" }}>{c.description || "Ingen beskrivning"}</td>
-                  <td>
-  {c.host_id === user.id ? (
-    <button disabled className="avatar-btn">Host</button>
-  ) : (
-    <button
-      className="avatar-btn"
-      onClick={() =>
-        handleToggleParticipation(
-          c.id,
-          c.participants.some((p) => Number(p.id) === Number(user.id))
-        )
-      }
-    >
-      {c.participants.some((p) => Number(p.id) === Number(user.id)) ? "Gå ur" : "Gå med"}
-    </button>
-  )}
-</td>
+              {activeChallenges.map((c) => {
+                const isJoined = c.participants.some(
+                  (p) => Number(p.user_id) === Number(user.id) && p.status === "joined"
+                );
 
-
-                </tr>
-              ))}
+                return (
+                  <tr key={c.id}>
+                    <td data-label="Challenge">{c.title}</td>
+                    <td data-label="Start">{c.start}</td>
+                    <td data-label="Deadline">{c.end}</td>
+                    <td data-label="Värd">{c.host}</td>
+                    <td data-label="Deltagare">
+                      <ChallengeParticipants challengeId={c.id} participants={c.participants} />
+                    </td>
+                    <td data-label="Information" style={{ maxWidth: "200px" }}>
+                      {c.description || "Ingen beskrivning"}
+                    </td>
+                    <td>
+                      {Number(c.host_id) === Number(user.id) ? (
+                        <button disabled className="avatar-btn">Host</button>
+                      ) : (
+                        <button
+                          className="avatar-btn"
+                          onClick={() => handleToggleParticipation(c.id, isJoined)}
+                        >
+                          {isJoined ? "Gå ur" : "Gå med"}
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
@@ -179,3 +145,4 @@ const handleToggleParticipation = async (challengeId, isJoined) => {
 };
 
 export default AllChallengesPage;
+
