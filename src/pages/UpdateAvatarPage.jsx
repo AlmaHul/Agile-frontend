@@ -6,16 +6,16 @@ import { getAuthHeaders } from "../auth/authService";
 import { API_URL } from "../utils/api";
 import "../css/CreateAvatar.css";
 import {
-  hairOptions,
-  accessoriesOptions,
-  hairColorOptions,
-  clotheOptions,
-  clotheColorOptions,
-  eyeOptions,
-  eyebrowOptions,
-  facialHairOptions,
-  mouthOptions,
-  skinOptions
+  hairOptions, hairLabels,
+  accessoriesOptions,accessoriesLabels,
+  hairColorOptions, hairColorLabels,
+  clotheOptions, clotheLabels,
+  clotheColorOptions, clotheColorLabels,
+  eyeOptions, eyeLabels,
+  eyebrowOptions, eyebrowLabels,
+  facialHairOptions, facialHairLabels,
+  mouthOptions, mouthLabels,
+  skinOptions, skinLabels
 } from "../constants/avatarOptions";
 
 const UpdateAvatarPage = () => {
@@ -102,71 +102,98 @@ const UpdateAvatarPage = () => {
       <div className="avatar-options">
         <label>
           Hårtyp:
-          <select value={avatar.top_type} onChange={(e) => handleChange("top_type", e.target.value)}>
-            {hairOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-          </select>
+         <select
+    value={avatar.top_type}
+    onChange={(e) => handleChange("top_type", e.target.value)}
+  >
+    {hairOptions.map((opt) => (
+      <option key={opt} value={opt}>
+        {hairLabels[opt]}
+      </option>
+    ))}
+  </select>
         </label>
 
         <label>
           Accessoarer:
-          <select value={avatar.accessories_type} onChange={(e) => handleChange("accessories_type", e.target.value)}>
-            {accessoriesOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-          </select>
+          <select
+    value={avatar.accessories_type}
+    onChange={(e) => handleChange("accessories_type", e.target.value)}
+  >
+    {accessoriesOptions.map((opt) => (
+      <option key={opt} value={opt}>
+        {accessoriesLabels[opt]}
+      </option>
+    ))}
+  </select>
         </label>
 
         <label>
           Hårfärg:
-          <select value={avatar.hair_color} onChange={(e) => handleChange("hair_color", e.target.value)}>
-            {hairColorOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-          </select>
+          <select
+    value={avatar.hair_color}
+    onChange={(e) => handleChange("hair_color", e.target.value)}
+  >
+    {hairColorOptions.map((opt) => (
+      <option key={opt} value={opt}>
+        {hairColorLabels[opt]}
+      </option>
+    ))}
+  </select>
         </label>
 
         <label>
           Skägg/mustasch:
-          <select value={avatar.facial_hair_type} onChange={(e) => handleChange("facial_hair_type", e.target.value)}>
-            {facialHairOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+          <select value={avatar.facial_hair_type}
+          onChange={(e) => handleChange("facial_hair_type", e.target.value)}
+          >
+            {facialHairOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                    {facialHairLabels[opt]}</option>))}
           </select>
         </label>
 
         <label>
           Kläder:
-          <select value={avatar.clothe_type} onChange={(e) => handleChange("clothe_type", e.target.value)}>
-            {clotheOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+          <select value={avatar.clothe_type}
+          onChange={(e) => handleChange("clothe_type", e.target.value)}>
+            {clotheOptions.map((opt) => (
+                <option key={opt} value={opt}>{clotheLabels[opt]}</option>))}
           </select>
         </label>
 
         <label>
           Färg på kläder:
           <select value={avatar.clothe_color} onChange={(e) => handleChange("clothe_color", e.target.value)}>
-            {clotheColorOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+            {clotheColorOptions.map((opt) => ( <option key={opt} value={opt}>{clotheColorLabels[opt]}</option>))}
           </select>
         </label>
 
         <label>
           Ögon:
           <select value={avatar.eye_type} onChange={(e) => handleChange("eye_type", e.target.value)}>
-            {eyeOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+            {eyeOptions.map((opt) => ( <option key={opt} value={opt}>{eyeLabels[opt]}</option>))}
           </select>
         </label>
 
         <label>
           Ögonbryn:
           <select value={avatar.eyebrow_type} onChange={(e) => handleChange("eyebrow_type", e.target.value)}>
-            {eyebrowOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+            {eyebrowOptions.map((opt) => ( <option key={opt} value={opt}>{eyebrowLabels[opt]}</option>))}
           </select>
         </label>
 
         <label>
           Mun:
           <select value={avatar.mouth_type} onChange={(e) => handleChange("mouth_type", e.target.value)}>
-            {mouthOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+            {mouthOptions.map((opt) => ( <option key={opt} value={opt}>{mouthLabels[opt]}</option>))}
           </select>
         </label>
 
         <label>
           Hudfärg:
           <select value={avatar.skin_color} onChange={(e) => handleChange("skin_color", e.target.value)}>
-            {skinOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+            {skinOptions.map((opt) => ( <option key={opt} value={opt}>{skinLabels[opt]}</option>))}
           </select>
         </label>
       </div>
