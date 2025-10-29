@@ -26,26 +26,19 @@ const HomePage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // User Search states
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [showSearchResults, setShowSearchResults] = useState(false);
-
   function formatResult(result) {
-  switch (result) {
-    case "done":
-      return "Klar ✅";
-    case "did_not_pass":
-      return "Klarade inte ❌";
-    case null:
-    case undefined:
-      return "Active 🔥";
-    default:
-      return "Active 🔥";
+    switch (result) {
+      case "done":
+        return "Klar ✅";
+      case "did_not_pass":
+        return "Klarade inte ❌";
+      case null:
+      case undefined:
+        return "Active 🔥";
+      default:
+        return "Active 🔥";
+    }
   }
-}
-
 
   // ---------------------------
   // Hämta inloggad användare med felhantering
@@ -152,57 +145,30 @@ const HomePage = () => {
     }
   }, [user]);
 
-
   // ---------------------------
-  // User Search Funktion
+  // Hämta inbjudningar
   // ---------------------------
-  const handleUserSearch = async (query) => {
-    setSearchQuery(query);
-    
-    if (query.length < 2) {
-      setSearchResults([]);
-      setShowSearchResults(false);
-      return;
-    }
-
-    setIsSearching(true);
-    try {
-      const res = await fetchWithAuth(`${API_URL}auth/search?q=${encodeURIComponent(query)}`);
-      if (res.ok) {
-        const data = await res.json();
-        setSearchResults(data.users || []);
-        setShowSearchResults(true);
-      } else {
-        console.error("Sökning misslyckades:", res.status);
-        setSearchResults([]);
-      }
-    } catch (err) {
-      console.error("Fel vid sökning:", err);
-      setSearchResults([]);
-    } finally {
-      setIsSearching(false);
-    }
-  };
-
-  const clearSearch = () => {
-    setSearchQuery("");
-    setSearchResults([]);
-    setShowSearchResults(false);
-  };
-
-  // Stäng sökresultat när man klickar utanför
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (!e.target.closest('.user-search-container')) {
-        setShowSearchResults(false);
+    const fetchInvites = async () => {
+      if (!user?.id) return;
+
+      setLoadingInvites(true);
+      try {
+        // Temporärt inaktiverat - sätt tom lista
+        console.log("Inbjudningar temporärt inaktiverade");
+        setInvitations([]);
+      } catch (err) {
+        console.error("Fel vid hämtning av inbjudningar:", err);
+        setInvitations([]);
+      } finally {
+        setLoadingInvites(false);
       }
     };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
+    
+    if (user) {
+      fetchInvites();
+    }
+  }, [user]);
 
   // ---------------------------
   // Navigering
@@ -212,62 +178,60 @@ const HomePage = () => {
   const handleUpdateAvatar = () => navigate("/update-avatar");
 
   const handleMarkDone = async (challengeId) => {
-  try {
-    const res = await fetchWithAuth(`${API_URL}challenge/${challengeId}/complete`, {
-      method: "PATCH",
-    });
-    if (!res.ok) throw new Error("Misslyckades att markera som klar");
-    const data = await res.json();
+    try {
+      const res = await fetchWithAuth(`${API_URL}challenge/${challengeId}/complete`, {
+        method: "PATCH",
+      });
+      if (!res.ok) throw new Error("Misslyckades att markera som klar");
+      const data = await res.json();
 
-    // Uppdatera state direkt
-    setActiveChallenges(prev =>
-      prev.map(c =>
-        c.id === challengeId
-          ? {
-              ...c,
-              participants: c.participants.map(p =>
-                p.id === Number(user?.id)
-                  ? { ...p, result: "done", status: "joined" }
-                  : p
-              )
-            }
-          : c
-      )
-    );
-  } catch (err) {
-    alert(err.message);
-  }
-};
+      // Uppdatera state direkt
+      setActiveChallenges(prev =>
+        prev.map(c =>
+          c.id === challengeId
+            ? {
+                ...c,
+                participants: c.participants.map(p =>
+                  p.id === Number(user?.id)
+                    ? { ...p, result: "done", status: "joined" }
+                    : p
+                )
+              }
+            : c
+        )
+      );
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
-const handleMarkDidNotPass = async (challengeId) => {
-  try {
-    const res = await fetchWithAuth(`${API_URL}challenge/${challengeId}/did_not_pass`, {
-      method: "PATCH",
-    });
-    if (!res.ok) throw new Error("Misslyckades att markera som ej klar");
-    const data = await res.json();
+  const handleMarkDidNotPass = async (challengeId) => {
+    try {
+      const res = await fetchWithAuth(`${API_URL}challenge/${challengeId}/did_not_pass`, {
+        method: "PATCH",
+      });
+      if (!res.ok) throw new Error("Misslyckades att markera som ej klar");
+      const data = await res.json();
 
-    // Uppdatera state direkt
-    setActiveChallenges(prev =>
-      prev.map(c =>
-        c.id === challengeId
-          ? {
-              ...c,
-              participants: c.participants.map(p =>
-                p.id === Number(user?.id)
-                  ? { ...p, result: "did_not_pass", status: "joined" }
-                  : p
-              )
-            }
-          : c
-      )
-    );
-  } catch (err) {
-    alert(err.message);
-  }
-};
-
-
+      // Uppdatera state direkt
+      setActiveChallenges(prev =>
+        prev.map(c =>
+          c.id === challengeId
+            ? {
+                ...c,
+                participants: c.participants.map(p =>
+                  p.id === Number(user?.id)
+                    ? { ...p, result: "did_not_pass", status: "joined" }
+                    : p
+                )
+              }
+            : c
+        )
+      );
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   const handleDeleteChallenge = async (id) => {
     if (!window.confirm("Är du säker på att du vill radera denna utmaning?")) return;
@@ -352,67 +316,13 @@ const handleMarkDidNotPass = async (challengeId) => {
   // ---------------------------
   return (
     <div className="home-page">
-      {/* Välkomstsektion med sökfält */}
+      {/* Välkomstsektion UTAN sökfält */}
       <section className="welcome">
         <h1>
-  Hej {((userData?.username || user?.username || "Gäst").length > 10
-        ? (userData?.username || user?.username).slice(0, 10) + "…"
-        : userData?.username || user?.username || "Gäst")}! 👋
-</h1>
-
-        
-        {/* User Search Section */}
-        <div className="user-search-container">
-          <div className="search-input-wrapper">
-            <input
-              type="text"
-              placeholder="Sök efter användare..."
-              value={searchQuery}
-              onChange={(e) => handleUserSearch(e.target.value)}
-              onClick={(e) => e.stopPropagation()}
-              className="search-input"
-            />
-            
-            {searchQuery && (
-              <button
-                onClick={clearSearch}
-                className="search-clear-btn"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-
-          {/* Sökresultat Dropdown - KORRIGERAD: länkar till profiler */}
-          {showSearchResults && (
-            <div className="search-results-dropdown">
-              {isSearching ? (
-                <div className="search-loading">Söker...</div>
-              ) : searchResults.length > 0 ? (
-                searchResults.map((user) => (
-                  <div
-                    key={user.id}
-                    className="search-result-item"
-                    onClick={() => {
-                      // KORRIGERAD: Navigera till användarens profil istället för alert
-                      navigate(`/user/${user.id}`);
-                      clearSearch();
-                    }}
-                  >
-                    <div className="user-avatar">
-                      {user.username.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="username">{user.username}</span>
-                  </div>
-                ))
-              ) : searchQuery.length >= 2 ? (
-                <div className="search-no-results">
-                  Inga användare hittades
-                </div>
-              ) : null}
-            </div>
-          )}
-        </div>
+          Hej {((userData?.username || user?.username || "Gäst").length > 10
+            ? (userData?.username || user?.username).slice(0, 10) + "…"
+            : userData?.username || user?.username || "Gäst")}! 👋
+        </h1>
       </section>
 
       {/* Avatar */}
@@ -461,9 +371,8 @@ const handleMarkDidNotPass = async (challengeId) => {
                 <tr key={c.id}>
                   <td data-label="Challenge">{c.title}</td>
                   <td data-label="Status">
-  {formatResult(c.participants.find(p => p.id === Number(user?.id))?.result)}
-</td>
-
+                    {formatResult(c.participants.find(p => p.id === Number(user?.id))?.result)}
+                  </td>
                   <td data-label="Start">{c.start}</td>
                   <td data-label="Mål">{c.end}</td>
                   <td data-label="Värd">{c.host}</td>
@@ -477,33 +386,30 @@ const handleMarkDidNotPass = async (challengeId) => {
                     {c.description || "Ingen beskrivning"}
                   </td>
                   <td data-label="Åtgärd">
-  <ParticipantActionDropdown
-    participant={c.participants.find(p => p.id === Number(user?.id) && p.status === "joined")}
-    handleMarkDone={handleMarkDone}
-    handleMarkDidNotPass={handleMarkDidNotPass}
-    challengeId={c.id}
-  />
-</td>
-
-
+                    <ParticipantActionDropdown
+                      participant={c.participants.find(p => p.id === Number(user?.id) && p.status === "joined")}
+                      handleMarkDone={handleMarkDone}
+                      handleMarkDidNotPass={handleMarkDidNotPass}
+                      challengeId={c.id}
+                    />
+                  </td>
                   <td data-label="Admin">
-  {c.host_id === Number(user?.id) && (
-    <div style={{ display: "flex", gap: "5px" }}>
-      {/* Delete-knappen visas alltid för host */}
-      <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
-        <img src={deleteIcon} alt="Ta bort" width={20} />
-      </button>
+                    {c.host_id === Number(user?.id) && (
+                      <div style={{ display: "flex", gap: "5px" }}>
+                        {/* Delete-knappen visas alltid för host */}
+                        <button className="avatar-btn" onClick={() => handleDeleteChallenge(c.id)}>
+                          <img src={deleteIcon} alt="Ta bort" width={20} />
+                        </button>
 
-      {/* Update-knappen visas endast om inga deltagare finns */}
-      {c.participants.length === 0 && (
-        <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
-          <img src={updateIcon} alt="Uppdatera" width={20} />
-        </button>
-      )}
-    </div>
-  )}
-</td>
-
+                        {/* Update-knappen visas endast om inga deltagare finns */}
+                        {c.participants.length === 0 && (
+                          <button className="avatar-btn" onClick={() => navigate(`/update-challenge/${c.id}`)}>
+                            <img src={updateIcon} alt="Uppdatera" width={20} />
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
