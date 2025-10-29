@@ -125,7 +125,8 @@ const HomePage = () => {
           participants: c.participants?.map((p) => ({
             id: p.id,
             username: p.username || p.email,
-            status: p.status
+            status: p.status,
+            result: p.result // Se till att result ingår
           })) || [],
         }));
         setActiveChallenges(mapped);
@@ -177,11 +178,15 @@ const HomePage = () => {
   const handleCreateAvatar = () => navigate("/create-avatar");
   const handleUpdateAvatar = () => navigate("/update-avatar");
 
-  const handleMarkDone = async (challengeId) => {
+  const handleMarkDone = async (challengeId, targetUserId = null) => {
     try {
-      const res = await fetchWithAuth(`${API_URL}challenge/${challengeId}/complete`, {
-        method: "PATCH",
-      });
+      const userIdToUpdate = targetUserId || user?.id;
+      const res = await fetchWithAuth(
+        `${API_URL}challenge/${challengeId}/complete${targetUserId ? `?user_id=${targetUserId}` : ''}`, 
+        {
+          method: "PATCH",
+        }
+      );
       if (!res.ok) throw new Error("Misslyckades att markera som klar");
       const data = await res.json();
 
@@ -192,7 +197,7 @@ const HomePage = () => {
             ? {
                 ...c,
                 participants: c.participants.map(p =>
-                  p.id === Number(user?.id)
+                  p.id === Number(userIdToUpdate)
                     ? { ...p, result: "done", status: "joined" }
                     : p
                 )
@@ -205,11 +210,15 @@ const HomePage = () => {
     }
   };
 
-  const handleMarkDidNotPass = async (challengeId) => {
+  const handleMarkDidNotPass = async (challengeId, targetUserId = null) => {
     try {
-      const res = await fetchWithAuth(`${API_URL}challenge/${challengeId}/did_not_pass`, {
-        method: "PATCH",
-      });
+      const userIdToUpdate = targetUserId || user?.id;
+      const res = await fetchWithAuth(
+        `${API_URL}challenge/${challengeId}/did_not_pass${targetUserId ? `?user_id=${targetUserId}` : ''}`, 
+        {
+          method: "PATCH",
+        }
+      );
       if (!res.ok) throw new Error("Misslyckades att markera som ej klar");
       const data = await res.json();
 
@@ -220,7 +229,7 @@ const HomePage = () => {
             ? {
                 ...c,
                 participants: c.participants.map(p =>
-                  p.id === Number(user?.id)
+                  p.id === Number(userIdToUpdate)
                     ? { ...p, result: "did_not_pass", status: "joined" }
                     : p
                 )
@@ -380,6 +389,9 @@ const HomePage = () => {
                     <ChallengeParticipants
                       challengeId={c.id}
                       participants={c.participants}
+                      isHost={c.host_id === Number(user?.id)}
+                      handleMarkDone={handleMarkDone}
+                      handleMarkDidNotPass={handleMarkDidNotPass}
                     />
                   </td>
                   <td data-label="Information" style={{ maxWidth: "200px" }}>

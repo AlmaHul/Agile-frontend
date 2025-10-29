@@ -34,7 +34,8 @@ const AllChallengesPage = () => {
           participants: c.participants?.map((p) => ({
             user_id: p.id,
             username: p.username || p.email,
-            status: p.status
+            status: p.status,
+            result: p.result // ← LÄGG TILL RESULT
           })) || [],
         }));
         setActiveChallenges(mapped);
@@ -65,6 +66,48 @@ const AllChallengesPage = () => {
     } catch (err) {
       console.error(err);
       alert("Fel vid uppdatering av deltagande");
+    }
+  };
+
+  // Markera som klar
+  const handleMarkDone = async (challengeId, targetUserId = null) => {
+    try {
+      let url = `${API_URL}challenge/${challengeId}/complete`;
+      if (targetUserId) {
+        url += `?user_id=${targetUserId}`;
+      }
+      
+      const res = await fetchWithAuth(url, { method: "PATCH" });
+      if (res.ok) {
+        fetchAllChallenges();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Kunde inte markera som klar");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Fel vid markering som klar");
+    }
+  };
+
+  // Markera som ej klar
+  const handleMarkDidNotPass = async (challengeId, targetUserId = null) => {
+    try {
+      let url = `${API_URL}challenge/${challengeId}/did_not_pass`;
+      if (targetUserId) {
+        url += `?user_id=${targetUserId}`;
+      }
+      
+      const res = await fetchWithAuth(url, { method: "PATCH" });
+      if (res.ok) {
+        fetchAllChallenges();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Kunde inte markera som ej klar");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Fel vid markering som ej klar");
     }
   };
 
@@ -99,6 +142,7 @@ const AllChallengesPage = () => {
                 <th>Deadline</th>
                 <th>Värd</th>
                 <th>Deltagare</th>
+                <th>Status</th> {/* ← NY KOLUMN */}
                 <th>Beskrivning</th>
                 <th>Gå med</th>
               </tr>
@@ -108,6 +152,12 @@ const AllChallengesPage = () => {
                 const isJoined = c.participants.some(
                   (p) => Number(p.user_id) === Number(user.id) && p.status === "joined"
                 );
+                const isHost = Number(c.host_id) === Number(user.id);
+                
+                // Hitta användarens deltagarinfo
+                const userParticipant = c.participants.find(
+                  p => Number(p.user_id) === Number(user.id)
+                );
 
                 return (
                   <tr key={c.id}>
@@ -116,13 +166,38 @@ const AllChallengesPage = () => {
                     <td data-label="Deadline">{c.end}</td>
                     <td data-label="Värd">{c.host}</td>
                     <td data-label="Deltagare">
-                      <ChallengeParticipants challengeId={c.id} participants={c.participants} />
+                      <ChallengeParticipants 
+                        challengeId={c.id} 
+                        participants={c.participants}
+                        isHost={isHost}
+                        handleMarkDone={handleMarkDone}
+                        handleMarkDidNotPass={handleMarkDidNotPass}
+                      />
+                    </td>
+                    <td data-label="Status">
+                      {/* Visa status för användaren */}
+                      {isHost && (
+                        <span style={{color: '#666', fontSize: '0.9rem'}}>
+                          Värd
+                        </span>
+                      )}
+                      {!isHost && userParticipant && (
+                        <div>
+                          {userParticipant.result === "done" && "✅ Klar"}
+                          {userParticipant.result === "did_not_pass" && "❌ Ej klar"}
+                          {!userParticipant.result && isJoined && "🔥 Aktiv"}
+                          {!userParticipant.result && !isJoined && "❌ Ej med"}
+                        </div>
+                      )}
+                      {!isHost && !userParticipant && (
+                        <span style={{color: '#666'}}>Ej med</span>
+                      )}
                     </td>
                     <td data-label="Information" style={{ maxWidth: "200px" }}>
                       {c.description || "Ingen beskrivning"}
                     </td>
                     <td>
-                      {Number(c.host_id) === Number(user.id) ? (
+                      {isHost ? (
                         <button disabled className="avatar-btn">Host</button>
                       ) : (
                         <button
@@ -145,4 +220,3 @@ const AllChallengesPage = () => {
 };
 
 export default AllChallengesPage;
-
