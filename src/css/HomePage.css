@@ -275,7 +275,7 @@ button:hover {
   font-weight: 500;
 }
 
-/* FIXED: Responsive design - behåll tabellhuvudet */
+/* Responsive design */
 @media (max-width: 768px) {
   .search-input {
     width: 280px;
@@ -285,14 +285,25 @@ button:hover {
   .user-search-container {
     margin-top: 1rem;
   }
+}
 
+@media (max-width: 480px) {
+  .search-input {
+    width: 250px;
+    font-size: 0.9rem;
+  }
+}
+
+/* --- RESPONSIVE CHALLENGE TABLE --- */
+/* --- Responsiv justering för små skärmar --- */
+@media (max-width: 768px) {
   .all-challenges-page {
-    margin: 20px;
-    padding: 0 10px;
+    margin: 20px; /* mindre margin på tablet/mobil */
+    padding: 0 10px; /* lite padding för innehåll */
   }
 
   .home-page section {
-    padding: 0 10px;
+    padding: 0 10px; /* minskar padding på sektioner */
   }
 
   .challenges-table th,
@@ -302,11 +313,6 @@ button:hover {
 }
 
 @media (max-width: 480px) {
-  .search-input {
-    width: 250px;
-    font-size: 0.9rem;
-  }
-
   .all-challenges-page {
     margin: 10px;
     padding: 0 5px;
@@ -319,55 +325,70 @@ button:hover {
   }
 }
 
-/* FIXED: Responsiv tabell - visa ALLA kolumner korrekt */
 @media (max-width: 768px) {
   .challenges-table {
     display: block;
     width: 100%;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
-  /* BEHÅLL tabellhuvudet för horisontell scroll */
   .challenges-table thead {
-    display: table-header-group;
+    display: none; /* döljer header */
   }
 
   .challenges-table tbody {
-    display: table-row-group;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 
   .challenges-table tr {
-    display: table-row;
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
 
-  .challenges-table th,
   .challenges-table td {
-    display: table-cell;
-    border: 1px solid #ddd;
-    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
     text-align: left;
   }
 
-  /* Ta bort de gamla mobilstilarna som döljer innehåll */
+  .challenges-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* Lägg till rubrik på varje cell */
   .challenges-table td::before {
-    content: none;
+    content: attr(data-label);
+    font-weight: 600;
+    color: #666;
+    flex: 1;
   }
 
   .challenges-table td span {
-    text-align: left;
+    flex: 1;
+    text-align: right;
   }
 }
 
-/* Ytterligare optimering för mycket små skärmar */
 @media (max-width: 480px) {
-  .challenges-table {
-    font-size: 0.8rem;
+  .challenges-table tr {
+    padding: 12px;
   }
-  
-  .challenges-table th,
-  .challenges-table td {
-    padding: 6px 4px;
+
+  .challenges-table td::before {
+    font-size: 0.85rem;
+  }
+
+  .challenges-table td span {
+    font-size: 0.85rem;
   }
 
   .avatar-btn {
@@ -375,5 +396,6 @@ button:hover {
     font-size: 0.9rem;
   }
 }
+
 
 
