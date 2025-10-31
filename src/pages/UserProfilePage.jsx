@@ -42,9 +42,12 @@ const UserProfilePage = () => {
         // Hämta utmaningar
         const challengesRes = await fetchWithAuth(`${API_URL}challenge/users/${userId}/challenges`);
         if (challengesRes.ok) {
-          const challengesData = await challengesRes.json();
-          setChallenges(challengesData.challenges || []);
+          const payload = await challengesRes.json();
+          // Stötta både: [{...}, {...}] och { challenges: [...] }
+          const list = Array.isArray(payload) ? payload : (payload.challenges ?? []);
+          setChallenges(list);
         }
+
 
       } catch (err) {
         setError(err.message);
@@ -118,6 +121,17 @@ const UserProfilePage = () => {
 
   const isOwnProfile = currentUser?.id === parseInt(userId);
 
+const labelFor = (row) => {
+  if (row.participant_result === "done") return "✅ Klar";
+  if (row.participant_result === "failed" || row.participant_result === "did_not_pass")
+    return "❌ Klarade inte";
+  if (row.participant_status === "joined") return "🔥 Aktiv";
+  return "🔥 Aktiv";
+};
+
+
+
+
   return (
     <div className="home-page">
       {/* Profil header */}
@@ -169,13 +183,8 @@ const UserProfilePage = () => {
               {challenges.map((challenge) => (
                 <tr key={challenge.id}>
                   <td>{challenge.title}</td>
-                  <td>
-                    {challenge.status === 'active' ? (
-                      <span style={{ color: '#e66b00' }}>🔥 Aktiv</span>
-                    ) : (
-                      <span style={{ color: 'green' }}>✅ Avslutad</span>
-                    )}
-                  </td>
+                  <td>{labelFor(challenge)}</td>
+
                   <td>
                     {challenge.start_at ? new Date(challenge.start_at).toLocaleDateString('sv-SE') : '-'}
                   </td>
