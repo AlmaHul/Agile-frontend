@@ -14,7 +14,9 @@ import ResetPassword from "./pages/ResetPassword";
 import UpdateChallengePage from "./pages/UpdateChallengePage";
 import AllChallengesPage from "./pages/AllChallengesPage";
 import UserProfilePage from "./pages/UserProfilePage";
-import AboutUs from "./pages/AboutUs";
+import AboutUs from "./pages/AboutUs.jsx";
+import Footer from "./components/Footer.jsx"; // lägg gärna till .jsx här också
+
 
 function App() {
   return (
