@@ -396,3 +396,43 @@ button:hover {
     font-size: 0.9rem;
   }
 }
+
+/* === Leaderboard styles === */
+.leaderboard-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 24px;
+  max-width: 560px;
+}
+
+.leaderboard-card h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+}
+
+.leaderboard-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* small screens */
+@media (max-width: 640px) {
+  .leaderboard-card { max-width: 100%; }
+  .leaderboard-table th:nth-child(1),
+  .leaderboard-table td:nth-child(1) { width: 64px; }
+}
