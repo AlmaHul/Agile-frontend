@@ -174,7 +174,7 @@ const labelFor = (row) => {
                 <th>Status</th>
                 <th>Start</th>
                 <th>Mål</th>
-                <th>Admin</th>
+                <th>Värd</th>
                 <th>Roll</th>
                 <th>Poäng</th>
               </tr>
@@ -194,7 +194,7 @@ const labelFor = (row) => {
                   <td>{challenge.host_username}</td>
                   <td>
                     {challenge.is_host ? (
-                      <span style={{ color: '#4a90e2', fontWeight: 'bold' }}>Admin</span>
+                      <span style={{ color: '#4a90e2', fontWeight: 'bold' }}>Värd</span>
                     ) : (
                       <span style={{ color: '#666' }}>Deltagare</span>
                     )}
