@@ -405,7 +405,7 @@ const HomePage = () => {
                       challengeId={c.id}
                     />
                   </td>
-                  <td data-label="Admin">
+                  <td data-label="Värd">
                     {c.host_id === Number(user?.id) && (
                       <div style={{ display: "flex", gap: "5px" }}>
                         {/* Delete-knappen visas alltid för host */}
