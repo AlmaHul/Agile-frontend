@@ -116,7 +116,7 @@ export default function AboutUs() {
             <h2 style={styles.sectionTitle}>Vårt arbetssätt</h2>
             <p style={styles.paragraph}>
               Vi har arbetat agilt enligt <strong>Scrum‑metoden</strong>, med sprintar, stand‑ups och retrospektiv.
-              Under projektets gång använde vi verktyg som GitHub Projects, Figma och Render för att samarbeta
+              Under projektets gång använde vi verktyg som GitHub Projects och Render för att samarbeta
               effektivt och hålla hela utvecklingsprocessen transparent. Vi turades även om att vara
               <em> Scrum Master </em> och <em> Product Owner </em> för att förstå hela flödet från planering till leverans.
             </p>
