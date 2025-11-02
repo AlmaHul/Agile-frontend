@@ -273,7 +273,7 @@
   }
 
   /* Draw the 3 bars directly in the button background (no span needed) */
-  .nav-toggle {
+  /*.nav-toggle {
     background-image:
       linear-gradient(#1f2937, #1f2937),
       linear-gradient(#1f2937, #1f2937),
