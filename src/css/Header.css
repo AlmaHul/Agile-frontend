@@ -2,11 +2,27 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* default: logga vänster, meny höger */
   padding: 10px 16px;
   background-color: #ffa94d1a;
   position: relative;
 }
+
+/* När användaren INTE är inloggad */
+.header.logged-out {
+  justify-content: space-between; /* logga vänster, meny höger */
+}
+
+/* När användaren ÄR inloggad */
+.header.logged-in {
+  justify-content: flex-start; /* sökfältet får ligga mellan logga och meny */
+}
+
+/* Se till att menyn alltid trycks åt höger */
+.header .nav-toggle {
+  margin-left: auto;
+}
+
 
 .logo-small {
   width: 40px;
@@ -179,6 +195,17 @@
     align-items: center;
     justify-content: center;
   }
+
+/* === Fix: flytta hamburgermenyn till höger när man är utloggad === */
+@media (max-width: 768px) {
+  .header.logged-out .nav-toggle {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    margin-left: 0; /* nollställ auto */
+  }
+}
+
 
   /* Dölj knapparna som standard, visa som panel när open */
   .header-buttons {
