@@ -73,7 +73,8 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="header">
+<header className={`header ${user ? 'logged-in' : 'logged-out'}`}>
+
       <img src={logo} alt="Jöra logo" className="logo-small" />
 
       {/* ✅ User Search i Header - visas endast när inloggad */}
