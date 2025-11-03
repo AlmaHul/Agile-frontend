@@ -13,6 +13,8 @@ const AllChallengesPage = () => {
   const [activeChallenges, setActiveChallenges] = useState([]);
   const [loadingChallenges, setLoadingChallenges] = useState(true);
   const [error, setError] = useState(null);
+  const [leaderboard, setLeaderboard] = useState([]);
+
 
   // Hämta alla challenges
   const fetchAllChallenges = async () => {
@@ -68,6 +70,16 @@ const AllChallengesPage = () => {
       alert("Fel vid uppdatering av deltagande");
     }
   };
+
+useEffect(() => {
+  fetchWithAuth(`${API_URL}challenge/leaderboard/top5`)
+    .then(res => res.json())
+    .then(data => setLeaderboard(data.top || []))
+    .catch(err => console.error("Leaderboard error:", err));
+}, []);
+
+
+
 
   // Markera som klar
   const handleMarkDone = async (challengeId, targetUserId = null) => {
@@ -130,6 +142,29 @@ const AllChallengesPage = () => {
   return (
     <div className="all-challenges-page">
       <section className="active-challenges">
+      {/* Leaderboard */}
+<div className="leaderboard-card">
+  <h2>🏆 Top 5 – mest poäng</h2>
+  <table className="leaderboard-table">
+    <thead>
+      <tr>
+        <th>Plats</th>
+        <th>Användare</th>
+        <th>Poäng</th>
+      </tr>
+    </thead>
+    <tbody>
+      {leaderboard.map((user, i) => (
+        <tr key={user.username}>
+          <td>{i + 1}</td>
+          <td>{user.username}</td>
+          <td>{user.points}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
         <h2>Alla utmaningar 🔥</h2>
         {activeChallenges.length === 0 ? (
           <p>Inga utmaningar just nu</p>
