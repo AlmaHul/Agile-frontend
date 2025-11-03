@@ -7,6 +7,13 @@ import logo from "../assets/images/JöraLogo.png";
 import "../css/Forms.css"; 
 import "../css/Header.css"; 
 
+// Funktion för att begränsa långa användarnamn
+const truncateUsername = (username, maxLength = 12) => {
+  if (!username) return '';
+  if (username.length <= maxLength) return username;
+  return username.substring(0, maxLength) + '…';
+};
+
 export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -73,7 +80,7 @@ export default function Header() {
   }, []);
 
   return (
-<header className={`header ${user ? 'logged-in' : 'logged-out'}`}>
+    <header className={`header ${user ? 'logged-in' : 'logged-out'}`}>
 
       <img src={logo} alt="Jöra logo" className="logo-small" />
 
@@ -119,7 +126,7 @@ export default function Header() {
                     <div className="header-user-avatar">
                       {user.username.charAt(0).toUpperCase()}
                     </div>
-                    <span className="header-username">{user.username}</span>
+                    <span className="header-username">{truncateUsername(user.username)}</span>
                   </div>
                 ))
               ) : searchQuery.length >= 2 ? (

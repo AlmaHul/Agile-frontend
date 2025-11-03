@@ -5,6 +5,13 @@ import { API_URL } from "../utils/api";
 import { useAuth } from "../auth/AuthProvider";
 import { fetchWithAuth } from "../auth/authService";
 
+// Lägg till denna funktion för att begränsa långa användarnamn
+const truncateUsername = (username, maxLength = 12) => {
+  if (!username) return '';
+  if (username.length <= maxLength) return username;
+  return username.substring(0, maxLength) + '…';
+};
+
 const UserProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -150,7 +157,7 @@ const labelFor = (row) => {
             />
           )}
           <div>
-            <h1>{userData.username}'s profil 👤</h1>
+            <h1>{truncateUsername(userData.username)}'s profil 👤</h1>
             {isOwnProfile && (
               <p style={{ color: '#666', fontStyle: 'italic' }}>
                 Det här är din egen profil
@@ -162,7 +169,7 @@ const labelFor = (row) => {
 
       {/* Användarens utmaningar */}
       <section className="active-challenges">
-        <h2>{userData.username}'s utmaningar 🏆</h2>
+        <h2>{truncateUsername(userData.username)}'s utmaningar 🏆</h2>
         
         {challenges.length === 0 ? (
           <p>Inga utmaningar att visa</p>

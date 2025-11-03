@@ -9,6 +9,13 @@ import { fetchWithAuth } from "../auth/authService";
 import ChallengeParticipants from "../components/ChallengeParticipants";
 import ParticipantActionDropdown from "../components/ParticipantActionDropdown";
 
+// Lägg till denna funktion för att begränsa långa användarnamn
+const truncateUsername = (username, maxLength = 12) => {
+  if (!username) return 'Gäst';
+  if (username.length <= maxLength) return username;
+  return username.substring(0, maxLength) + '…';
+};
+
 const HomePage = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
@@ -189,9 +196,7 @@ const HomePage = () => {
     <div className="home-page">
       <section className="welcome">
         <h1>
-          Hej {((userData?.username || user?.username || "Gäst").length > 10
-            ? (userData?.username || user?.username).slice(0, 10) + "…"
-            : userData?.username || user?.username || "Gäst")}! 👋
+          Hej {truncateUsername(userData?.username || user?.username || "Gäst")}! 👋
         </h1>
       </section>
 

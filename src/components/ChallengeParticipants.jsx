@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import { fetchWithAuth } from "../auth/authService";
 import { API_URL } from "../utils/api";
 
+// Lägg till denna funktion
+const truncateUsername = (username, maxLength = 12) => {
+  if (!username) return '';
+  if (username.length <= maxLength) return username;
+  return username.substring(0, maxLength) + '…';
+};
+
 /**
  * Render participants as a plain comma-separated text string.
  * Excludes the host/creator from the list (via is_host flag or matching ID/username).
@@ -48,7 +55,7 @@ const ChallengeParticipants = ({
       if (hostUsername && p.username === hostUsername) return false; // samma namn som värden
       return true;
     })
-    .map((p) => p?.username)
+    .map((p) => truncateUsername(p?.username)) // ← APPLY TRUNCATE HERE
     .filter(Boolean);
 
   return (
