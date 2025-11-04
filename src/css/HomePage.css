@@ -1,0 +1,569 @@
+.home-page {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7f9fc 0%, #e8ecf5 100%);
+  font-family: "Inter", sans-serif;
+}
+.all-challenges-page {
+  flex-direction: column;
+  margin: 50px;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7f9fc 0%, #e8ecf5 100%);
+  font-family: "Inter", sans-serif;
+}
+
+/* --- WELCOME SECTION --- */
+.welcome {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.welcome h1 {
+  font-size: 2.8rem;
+  color: #222;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* --- SCORE BOARD --- */
+/* Container för leaderboard-kortet */
+.leaderboard-card {
+  max-width: 400px;
+  margin: 40px auto; /* Centrerar horisontellt och lägger lite margin ovanför */
+  padding: 20px 15px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Rubrik */
+.leaderboard-card h2 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #333333;
+}
+
+/* Tabell */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+/* Tabellen, header */
+.leaderboard-table th {
+  background-color: #e66b00;
+  color: white;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+
+/* Tabellen, rader */
+.leaderboard-table td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Varannan rad lite ljusare */
+.leaderboard-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover-effekt */
+.leaderboard-table tbody tr:hover {
+  background-color: #e0f7fa;
+}
+
+/* Poäng i fetstil */
+.leaderboard-table td:last-child {
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+
+
+
+/* --- AVATAR SECTION --- */
+.avatar {
+  text-align: center;
+}
+
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-image {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 4px solid #4a90e2;
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.avatar-image:hover {
+  transform: scale(1.05);
+}
+
+/* --- BUTTON STYLE --- */
+.avatar-btn {
+  margin-top: 1.2rem;
+  background-color: #e66b00;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.avatar-btn:hover {
+  background-color: #357ab8;
+  transform: translateY(-2px);
+}
+
+
+section {
+  margin-bottom: 50px;
+  padding: 0 60px;
+}
+
+.cards, .invite-card {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.card, .invite-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 200px;
+}
+
+.card.active {
+  border-color: #4caf50;
+}
+
+.card.done {
+  border-color: #2196f3;
+}
+
+button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: #e66b00;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+
+
+.challenges-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.challenges-table th,
+.challenges-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.challenges-table th {
+  background-color: #f4f4f4;
+}
+
+.challenges-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.challenges-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.challenges-table button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: #e66b00;
+  color: white;
+}
+
+.challenges-table button:hover {
+  opacity: 0.9;
+}
+/* Standard (dataläge) */
+.challenges-table td[data-label="Information"] {
+  width: 200px;   /* fix bredd i desktop/data-läge */
+}
+
+/* --- USER SEARCH SECTION --- */
+.user-search-container {
+  position: relative;
+  display: inline-block;
+  margin-top: 1.5rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.search-input {
+  padding: 12px 45px 12px 20px;
+  width: 350px;
+  border-radius: 25px;
+  border: 2px solid #ddd;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.search-clear-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Search Results Dropdown */
+.search-results-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+
+.search-result-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+  background-color: #f7f9fc;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2 0%, #357ab8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.username {
+  font-weight: 500;
+  color: #222;
+  font-size: 1rem;
+}
+
+.search-loading,
+.search-no-results {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.search-loading {
+  color: #4a90e2;
+  font-weight: 500;
+}
+/* DROPDOWN MENY FÖR DELTAGARE & POÄNG */
+.participants-dropdown summary {
+  color: #007bff;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+  list-style: none;
+}
+
+.participants-dropdown summary:hover {
+  color: #0056b3; /* mörkare blå vid hover */
+}
+
+.participants-dropdown[open] summary {
+  color: #0056b3;
+}
+
+.participants-list {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.participant-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.participant-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.participant-score {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+
+/* liten fade-animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .search-input {
+    width: 280px;
+    padding: 10px 40px 10px 16px;
+  }
+  
+  .user-search-container {
+    margin-top: 1rem;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .search-input {
+    width: 250px;
+    font-size: 0.9rem;
+  }
+}
+
+/* --- RESPONSIVE CHALLENGE TABLE --- */
+/* --- Responsiv justering för små skärmar --- */
+@media (max-width: 768px) {
+  .all-challenges-page {
+    margin: 20px; /* mindre margin på tablet/mobil */
+    padding: 0 10px; /* lite padding för innehåll */
+  }
+
+  .home-page section {
+    padding: 0 10px; /* minskar padding på sektioner */
+  }
+
+  .challenges-table th,
+  .challenges-table td {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .all-challenges-page {
+    margin: 10px;
+    padding: 0 5px;
+  }
+
+  .challenges-table th,
+  .challenges-table td {
+    padding: 4px 6px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .challenges-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .challenges-table thead {
+    display: none; /* döljer header */
+  }
+
+  .challenges-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .challenges-table tr {
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+.challenges-table td {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* 🟢 detta fixar vertikal placering */
+  padding: 8px 0;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+}
+
+  .challenges-table td span {
+  flex: 1;
+  text-align: right;
+  word-break: break-word;
+  white-space: normal;
+}
+
+
+  .challenges-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* Lägg till rubrik på varje cell */
+  .challenges-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #666;
+    flex: 1;
+  }
+
+
+
+@media (max-width: 480px) {
+  .challenges-table tr {
+    padding: 12px;
+  }
+
+  .challenges-table td::before {
+    font-size: 0.85rem;
+  }
+
+  .challenges-table td span {
+    font-size: 0.85rem;
+  }
+
+  .avatar-btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}
+@media (max-width: 768px) {
+  .challenges-table td[data-label="Information"] {
+    display: flex;
+    justify-content: space-between; /* 🟢 label vänster, text höger */
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .challenges-table td[data-label="Information"]::before {
+    flex: 0 0 auto;  /* låt labeln ha naturlig bredd */
+    margin-right: 10px;
+    text-align: left;
+  }
+
+  .challenges-table td[data-label="Information"] span {
+    flex: 1;
+    text-align: right; /* 🟢 placerar texten längst till höger */
+    word-break: break-word;
+    white-space: normal;
+  }
+}
+
+.challenges-table td[data-label="Information"] span {
+  flex: 1;
+  text-align: right;
+  word-break: break-word;
+  white-space: normal;
+  max-width: 25ch; /* 🟢 cirka 50 tecken per rad */
+}
+
+  .participants-dropdown summary {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+  }
+
+  .participants-list {
+    width: 100%; /* se till att listan fyller hela td */
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+}
+
+
+

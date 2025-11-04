@@ -1,0 +1,402 @@
+/* ---------- Base layout ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* default: logga vänster, meny höger */
+  padding: 10px 16px;
+  background-color: #ffa94d1a;
+  position: relative;
+}
+
+/* När användaren INTE är inloggad */
+.header.logged-out {
+  justify-content: space-between; /* logga vänster, meny höger */
+}
+
+/* När användaren ÄR inloggad */
+.header.logged-in {
+  justify-content: flex-start; /* sökfältet får ligga mellan logga och meny */
+}
+
+/* Se till att menyn alltid trycks åt höger */
+.header .nav-toggle {
+  margin-left: auto;
+}
+
+
+.logo-small {
+  width: 40px;
+  height: 40px;
+}
+
+/* Buttons container (desktop) */
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Hamburger (hidden on desktop) */
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: #ffffffcc;          /* syns mot orange */
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+  z-index: 10;                     /* om något skulle ligga över */
+}
+
+.nav-toggle:hover { background:#fff; transform: scale(1.05); }
+
+/* De tre strecken */
+.bar {
+  display: block;
+  width: 22px;
+  height: 3px;
+  margin: 4px auto;
+  border-radius: 2px;
+  background: #222;                /* mörk så den syns */
+}
+
+/* --- HEADER SEARCH STYLES --- */
+.header-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 1.5rem;
+  flex: 1;
+  max-width: 300px;
+}
+
+.header-search-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.header-search-input {
+  padding: 8px 35px 8px 15px;
+  width: 100%;
+  border-radius: 20px;
+  border: 2px solid #ddd;
+  font-size: 0.9rem;
+  font-family: "Inter", sans-serif;
+  background-color: white;
+  transition: all 0.3s ease;
+  box-shadow: none; /* ✅ Se till att ingen blå skugga */
+}
+
+.header-search-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 2px 6px rgba(74, 144, 226, 0.2);
+}
+
+.header-search-clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.header-search-clear-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Header Search Results */
+.header-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 5px;
+}
+
+.header-search-result-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.header-search-result-item:hover {
+  background-color: #f7f9fc;
+}
+
+.header-search-result-item:last-child {
+  border-bottom: none;
+}
+
+.header-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2 0%, #357ab8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-username {
+  font-weight: 500;
+  color: #222;
+  font-size: 0.9rem;
+}
+
+.header-search-loading,
+.header-search-no-results {
+  padding: 15px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.header-search-loading {
+  color: #4a90e2;
+  font-weight: 500;
+}
+
+/* ---------- Mobile layout ---------- */
+@media (max-width: 768px) {
+  /* Visa hamburgaren */
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+/* === Fix: flytta hamburgermenyn till höger när man är utloggad === */
+@media (max-width: 768px) {
+  .header.logged-out .nav-toggle {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    margin-left: 0; /* nollställ auto */
+  }
+}
+
+
+  /* Dölj knapparna som standard, visa som panel när open */
+  .header-buttons {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 12px;
+    flex-direction: column;
+    background: white;
+    border: 1px solid #0001;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 30px #0002;
+    min-width: 200px;
+    z-index: 9999;
+  }
+
+  .header-buttons.is-open {
+    display: flex;
+  }
+
+  /* Om något globalt nollar span, säkerställ färg/visning på mobil */
+  .header .nav-toggle .bar {
+    display: block !important;
+    background: #222 !important;
+  }
+
+  /* Mobile search adjustments */
+  .header-search-container {
+    margin: 0 1rem;
+    max-width: 200px;
+    order: 1;
+  }
+  
+  .header-search-input {
+    padding: 6px 30px 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .header-search-results {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    top: 70px;
+  }
+
+  .nav-toggle {
+    order: 2;
+  }
+  
+  .header-buttons {
+    order: 3;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-search-container {
+    margin: 0 0.5rem;
+    max-width: 150px;
+  }
+  
+  .header-search-input {
+    font-size: 0.8rem;
+    padding: 5px 25px 5px 10px;
+  }
+
+  .header-search-results {
+    left: 5px;
+    right: 5px;
+  }
+}
+
+/* Place header as positioning context */
+.header { position: relative; }
+
+/* Mobile overrides */
+@media (max-width: 768px) {
+  /* Put the toggle at the right edge, top of the header */
+  .nav-toggle {
+    display: inline-block;             /* visible on mobile */
+    position: absolute;
+    right: 12px;
+    top: 8px;
+
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: #ffffff;               /* button base */
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    cursor: pointer;
+  }
+
+  /* Draw the 3 bars directly in the button background (no span needed) */
+  /*.nav-toggle {
+    background-image:
+      linear-gradient(#1f2937, #1f2937),
+      linear-gradient(#1f2937, #1f2937),
+      linear-gradient(#1f2937, #1f2937);
+    background-repeat: no-repeat;
+    background-size: 22px 2.5px, 22px 2.5px, 22px 2.5px;
+    background-position: center 14px, center, center 30px;
+  }
+
+  /* If old <span class="bar"> exists, just hide to avoid conflicts */
+  .nav-toggle .bar { display: none !important; }
+
+  /* Your menu panel rules can stay som de är (visa/dölj) */
+  .header-buttons {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 12px;
+    flex-direction: column;
+    background: white;
+    border: 1px solid #0001;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 30px #0002;
+    min-width: 200px;
+    z-index: 9999;
+  }
+  .header-buttons.is-open { display: flex; }
+}
+
+/* --- Fix för mobilmenyn över sökrutan --- */
+/* Se till att header är positionerings-kontext */
+.header { position: relative; }
+
+/* Mobil: visa panelen med högt z-index */
+@media (max-width: 768px) {
+  .header-buttons {
+    display: none;                 /* default dold */
+    position: absolute;
+    top: 60px;
+    right: 12px;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #0001;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 30px #0002;
+    min-width: 200px;
+    z-index: 9999;                 /* VIKTIGT: över sökrutan */
+  }
+  .header-buttons.is-open { display: flex; }
+}
+
+/* Om sökrutan har hög z-index, sänk den lite */
+.search-wrapper, .search-input {
+  position: relative;
+  z-index: 1;
+}
+
+/* === MOBILE: Move search bar next to the logo === */
+@media (max-width: 768px) {
+  /* Gör hela headern flex så vi kan ändra ordning */
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Flytta logga + sökruta till vänster */
+  .logo-small,
+  .header-search-container {
+    order: 1;
+  }
+
+  .header-search-container {
+    flex: 1;
+    max-width: none;
+    margin-left: 8px;
+  }
+
+  /* Hamburgaren hamnar efter söket */
+  .nav-toggle {
+    order: 2;
+    position: static; /* ta bort absolute */
+    margin-left: auto;
+  }
+
+  /* Knappar (meny) längst ned */
+  .header-buttons {
+    order: 3;
+    width: 100%;
+  }
+
+  /* Hindra iOS zoom vid fokus */
+  .header-search-input {
+    font-size: 16px;
+  }
+}

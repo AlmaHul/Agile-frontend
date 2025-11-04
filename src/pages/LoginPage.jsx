@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import "../css/Forms.css";
 import logo from "../assets/images/JöraLogo.png";
-import { API_URL } from "../utils/api"; //
+import { API_URL } from "../utils/api";
 
 
 const LoginPage = () => {
@@ -29,7 +29,7 @@ const LoginPage = () => {
       if (response.ok) {
         const data = await response.json();
         login(data.access_token, data.refresh_token);
-        navigate("/home", { replace: true }); // navigera direkt efter login
+        navigate("/profile", { replace: true }); // navigera direkt efter login
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Inloggning misslyckades");
@@ -65,6 +65,12 @@ return (
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
+           {/* Glömt lösenord-länk */}
+          <p style={{ marginTop: "10px", textAlign: "right" }}>
+            <Link to="/forgot-password">Glömt lösenord?</Link>
+          </p>
+
           <button type="submit">Logga in</button>
         </form>
       </div>
