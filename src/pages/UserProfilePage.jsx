@@ -190,24 +190,26 @@ const labelFor = (row) => {
             <tbody>
               {challenges.map((challenge) => (
                 <tr key={challenge.id}>
-                  <td>{challenge.title}</td>
-                  <td>{labelFor(challenge)}</td>
 
-                  <td>
+                  <td data-label="Challenge">{challenge.title}</td>
+                  <td data-label="Status">{labelFor(challenge)}</td>
+
+
+                  <td data-label="Start">
                     {challenge.start_at ? new Date(challenge.start_at).toLocaleDateString('sv-SE') : '-'}
                   </td>
-                  <td>
+                  <td data-label="Mål">
                     {challenge.deadline_at ? new Date(challenge.deadline_at).toLocaleDateString('sv-SE') : '-'}
                   </td>
-                  <td>{challenge.host_username}</td>
-                  <td>
+                  <td data-label="Värd">{challenge.host_username}</td>
+                  <td data-label="Roll">
                     {challenge.is_host ? (
                       <span style={{ color: '#4a90e2', fontWeight: 'bold' }}>Värd</span>
                     ) : (
                       <span style={{ color: '#666' }}>Deltagare</span>
                     )}
                   </td>
-                  <td>
+                  <td data-label="Poäng">
                     {challenge.score !== null ? challenge.score : '-'}
                   </td>
                 </tr>
