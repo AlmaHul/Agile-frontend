@@ -386,6 +386,7 @@ button:hover {
   font-size: 0.9rem;
 }
 
+
 /* liten fade-animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-4px); }
@@ -403,6 +404,7 @@ button:hover {
     margin-top: 1rem;
   }
 }
+
 
 @media (max-width: 480px) {
   .search-input {

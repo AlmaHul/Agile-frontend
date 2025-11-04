@@ -251,13 +251,16 @@ const HomePage = () => {
 </td>
 
                 <td data-label="Åtgärd">
-                  <ParticipantActionDropdown
-                    participant={c.participants.find(p => p.id === Number(user?.id) && p.status === "joined")}
-                    handleMarkDone={handleMarkDone}
-                    handleMarkDidNotPass={handleMarkDidNotPass}
-                    challengeId={c.id}
-                  />
-                </td>
+  <div className="participants-dropdown-wrapper">
+    <ParticipantActionDropdown
+      participant={c.participants.find(p => p.id === Number(user?.id) && p.status === "joined")}
+      handleMarkDone={handleMarkDone}
+      handleMarkDidNotPass={handleMarkDidNotPass}
+      challengeId={c.id}
+    />
+  </div>
+</td>
+
                 <td data-label="Admin">
                   {c.host_id === Number(user?.id) && (
                     <div style={{ display: "flex", gap: "5px" }}>
