@@ -122,7 +122,7 @@ const HomePage = () => {
     const userIdToUpdate = targetUserId || user?.id;
     try {
       const res = await fetchWithAuth(
-        `${API_URL}challenge/${challengeId}/complete${targetUserId ? `?user_id=${targetUserId}` : ''}`, 
+        `${API_URL}challenge/${challengeId}/complete${targetUserId ? `?user_id=${targetUserId}` : ''}`,
         { method: "PATCH" }
       );
       if (!res.ok) throw new Error("Misslyckades att markera som klar");
@@ -140,7 +140,7 @@ const HomePage = () => {
     const userIdToUpdate = targetUserId || user?.id;
     try {
       const res = await fetchWithAuth(
-        `${API_URL}challenge/${challengeId}/did_not_pass${targetUserId ? `?user_id=${targetUserId}` : ''}`, 
+        `${API_URL}challenge/${challengeId}/did_not_pass${targetUserId ? `?user_id=${targetUserId}` : ''}`,
         { method: "PATCH" }
       );
       if (!res.ok) throw new Error("Misslyckades att markera som ej klar");
@@ -216,8 +216,7 @@ const HomePage = () => {
               <th>Start</th>
               <th>Mål</th>
               <th>Värd</th>
-              <th>Deltagare</th>
-              <th>Poäng</th>
+              <th>Deltagare & Poäng</th>
               <th>Information</th>
               <th>Åtgärd</th>
               <th>Admin</th>
@@ -231,12 +230,22 @@ const HomePage = () => {
                 <td data-label="Start">{c.start}</td>
                 <td data-label="Mål">{c.end}</td>
                 <td data-label="Värd">{c.host}</td>
-                <td data-label="Deltagare">
-                  {c.participants.map(p => (<div key={p.id}>{p.username}</div>))}
-                </td>
-                <td data-label="Poäng">
-                  {c.participants.map(p => (<div key={p.id}>{p.score ?? 0}</div>))}
-                </td>
+                <td data-label="Deltagare & Poäng">
+  <details className="participants-dropdown">
+    <summary>Visa deltagare ({c.participants.length})</summary>
+    <div className="participants-list">
+      {c.participants.map((p) => (
+        <div key={p.id} className="participant-item">
+          <span className="participant-name">
+            {p.username.length > 8 ? p.username.slice(0, 8) + ".." : p.username}
+          </span>
+          <span className="participant-score">{p.score ?? 0}</span>
+        </div>
+      ))}
+    </div>
+  </details>
+</td>
+
                 <td data-label="Information">
   <span>{c.description || "Ingen beskrivning"}</span>
 </td>

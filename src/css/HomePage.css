@@ -152,6 +152,10 @@ button:hover {
 .challenges-table button:hover {
   opacity: 0.9;
 }
+/* Standard (dataläge) */
+.challenges-table td[data-label="Information"] {
+  width: 200px;   /* fix bredd i desktop/data-läge */
+}
 
 /* --- USER SEARCH SECTION --- */
 .user-search-container {
@@ -273,6 +277,57 @@ button:hover {
 .search-loading {
   color: #4a90e2;
   font-weight: 500;
+}
+/* DROPDOWN MENY FÖR DELTAGARE & POÄNG */
+.participants-dropdown summary {
+  color: #007bff;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+  list-style: none;
+}
+
+.participants-dropdown summary:hover {
+  color: #0056b3; /* mörkare blå vid hover */
+}
+
+.participants-dropdown[open] summary {
+  color: #0056b3;
+}
+
+.participants-list {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.participant-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.participant-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.participant-score {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* liten fade-animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive design */
@@ -430,5 +485,21 @@ button:hover {
   white-space: normal;
   max-width: 25ch; /* 🟢 cirka 50 tecken per rad */
 }
+
+  .participants-dropdown summary {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+  }
+
+  .participants-list {
+    width: 100%; /* se till att listan fyller hela td */
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+}
+
 
 
