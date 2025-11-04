@@ -29,6 +29,68 @@
   letter-spacing: 0.5px;
 }
 
+/* --- SCORE BOARD --- */
+/* Container för leaderboard-kortet */
+.leaderboard-card {
+  max-width: 400px;
+  margin: 40px auto; /* Centrerar horisontellt och lägger lite margin ovanför */
+  padding: 20px 15px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Rubrik */
+.leaderboard-card h2 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #333333;
+}
+
+/* Tabell */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+/* Tabellen, header */
+.leaderboard-table th {
+  background-color: #e66b00;
+  color: white;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+
+/* Tabellen, rader */
+.leaderboard-table td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Varannan rad lite ljusare */
+.leaderboard-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover-effekt */
+.leaderboard-table tbody tr:hover {
+  background-color: #e0f7fa;
+}
+
+/* Poäng i fetstil */
+.leaderboard-table td:last-child {
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+
+
+
 /* --- AVATAR SECTION --- */
 .avatar {
   text-align: center;
