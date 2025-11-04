@@ -150,19 +150,27 @@ const labelFor = (row) => {
             />
           )}
           <div>
-            <h1>{userData.username}'s profil 👤</h1>
-            {isOwnProfile && (
-              <p style={{ color: '#666', fontStyle: 'italic' }}>
-                Det här är din egen profil
-              </p>
-            )}
-          </div>
+  <h1>
+    {userData.username.length > 10
+      ? `${userData.username.slice(0, 10)}...`
+      : userData.username}
+  </h1>
+  <h3>profil 👤</h3>
+  {isOwnProfile && (
+    <p style={{ color: '#666', fontStyle: 'italic' }}>
+      Det här är din egen profil
+    </p>
+  )}
+</div>
+
         </div>
       </section>
 
       {/* Användarens utmaningar */}
       <section className="active-challenges">
-        <h2>{userData.username}'s utmaningar 🏆</h2>
+        <h2>{userData.username.length > 10
+      ? `${userData.username.slice(0, 10)}...`
+      : userData.username}'s utmaningar 🏆</h2>
         
         {challenges.length === 0 ? (
           <p>Inga utmaningar att visa</p>
