@@ -140,7 +140,7 @@ useEffect(() => {
 
   // Main render
   return (
-    <div className="all-challenges-page">
+    <div className="home-page">
       <section className="active-challenges">
       {/* Leaderboard */}
 <div className="leaderboard-card">
@@ -228,9 +228,10 @@ useEffect(() => {
                         <span style={{color: '#666'}}>Ej med</span>
                       )}
                     </td>
-                    <td data-label="Information" style={{ maxWidth: "200px" }}>
-                      {c.description || "Ingen beskrivning"}
-                    </td>
+                    <td data-label="Information">
+  <span>{c.description || "Ingen beskrivning"}</span>
+</td>
+
                     <td>
                       {isHost ? (
                         <button disabled className="avatar-btn">Host</button>

@@ -237,7 +237,10 @@ const HomePage = () => {
                 <td data-label="Poäng">
                   {c.participants.map(p => (<div key={p.id}>{p.score ?? 0}</div>))}
                 </td>
-                <td data-label="Information" style={{ maxWidth: "200px" }}>{c.description || "Ingen beskrivning"}</td>
+                <td data-label="Information">
+  <span>{c.description || "Ingen beskrivning"}</span>
+</td>
+
                 <td data-label="Åtgärd">
                   <ParticipantActionDropdown
                     participant={c.participants.find(p => p.id === Number(user?.id) && p.status === "joined")}

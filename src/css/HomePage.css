@@ -351,14 +351,23 @@ button:hover {
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
 
-  .challenges-table td {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border: none;
-    border-bottom: 1px solid #f0f0f0;
-    text-align: left;
-  }
+.challenges-table td {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* 🟢 detta fixar vertikal placering */
+  padding: 8px 0;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+}
+
+  .challenges-table td span {
+  flex: 1;
+  text-align: right;
+  word-break: break-word;
+  white-space: normal;
+}
+
 
   .challenges-table td:last-child {
     border-bottom: none;
@@ -372,11 +381,7 @@ button:hover {
     flex: 1;
   }
 
-  .challenges-table td span {
-    flex: 1;
-    text-align: right;
-  }
-}
+
 
 @media (max-width: 480px) {
   .challenges-table tr {
@@ -396,6 +401,34 @@ button:hover {
     font-size: 0.9rem;
   }
 }
+@media (max-width: 768px) {
+  .challenges-table td[data-label="Information"] {
+    display: flex;
+    justify-content: space-between; /* 🟢 label vänster, text höger */
+    align-items: flex-start;
+    width: 100%;
+  }
 
+  .challenges-table td[data-label="Information"]::before {
+    flex: 0 0 auto;  /* låt labeln ha naturlig bredd */
+    margin-right: 10px;
+    text-align: left;
+  }
+
+  .challenges-table td[data-label="Information"] span {
+    flex: 1;
+    text-align: right; /* 🟢 placerar texten längst till höger */
+    word-break: break-word;
+    white-space: normal;
+  }
+}
+
+.challenges-table td[data-label="Information"] span {
+  flex: 1;
+  text-align: right;
+  word-break: break-word;
+  white-space: normal;
+  max-width: 25ch; /* 🟢 cirka 50 tecken per rad */
+}
 
 
